@@ -24,6 +24,9 @@ Notes from course for JSystem — AI dla programistów: od pomysłu do MVP
 - CLI tools, Automation, YOLO in container/cloud
 - Huge jump in quality of **Opus 4.5+**, GPT 5.4 and Gemini 3
 - **Open Source LLMs** so close to top models (GLM-5.2, Minimax M3, Kimi K2.6)
+- **Screenshots** as a better way to provide context for vision models (less tokens thanks to compression, more information thanks to formatting, colors, images, etc.)
+  - [DeepSeek OCR research paper on context compression](https://arxiv.org/abs/2510.18234)
+  - [Andrej Karpathy on X.com](https://x.com/karpathy/status/1980397031542989305?lang=en) "whether pixels are better inputs to LLMs than text. Maybe it makes more sense that all inputs to LLMs should only ever be images"
 - **AI disappointment**, broken promises, productivity drop, less fun and joy, frustration:
   - [AI Coding Sucks - YouTube](https://www.youtube.com/watch?v=0ZUkQF6boNg)
   - undeterministic nature of LLMs,
