@@ -21,9 +21,12 @@ Notes from course for JSystem — AI dla programistów: od pomysłu do MVP
   - Vibe Coding definition: [X.com](https://x.com/karpathy/status/1886192184808149383?lang=en)
 - **Context rot & Context engineering**
 - **Async Codding Agents in Cloud & on Mobile**
-- CLI tools, Automation, YOLO in container/cloud
+- CLI tools, Automation (Auto Review, Auto Mode), YOLO in container/cloud or local device (e.g. mac mini, Nvidia DGX Spark, AMD Strix Halo)
 - Huge jump in quality of **Opus 4.5+**, GPT 5.4 and Gemini 3
-- **Open Source LLMs** so close to top models (GLM-5.2, Minimax M3, Kimi K2.6)
+- **Open Source LLMs** are very close to top models:
+  - GLM-5.2, Minimax M3, Kimi K2.6, DeepSeek v4 Pro - best OSS models are all from China
+  - Best OSS for consumer hardware: Google [Gemma 4](https://ollama.com/library/gemma4), [Qwen 3.6](https://ollama.com/library/qwen3.6)
+  - could be used also with Claude Code: [Ollama](https://docs.ollama.com/integrations/claude-code), [vLLM](https://docs.vllm.ai/en/latest/serving/integrations/claude_code/) (good concurrency for scaling), [LocalAI](https://localai.io/integrations/index.html#claude-code)
 - **Screenshots** as a better way to provide context for vision models (less tokens thanks to compression, more information thanks to formatting, colors, images, etc.)
   - [DeepSeek OCR research paper on context compression](https://arxiv.org/abs/2510.18234)
   - [Andrej Karpathy on X.com](https://x.com/karpathy/status/1980397031542989305?lang=en) "whether pixels are better inputs to LLMs than text. Maybe it makes more sense that all inputs to LLMs should only ever be images"
