@@ -15,6 +15,7 @@ Use these tokens and assets to build UIs consistent with the NBP brand.
 | Logo (wordmark + mark) | [`assets/logo.svg`](../assets/logo.svg) | 205×64 SVG, NBP eagle mark + "NBP" |
 | Favicon | [`assets/favicon.ico`](../assets/favicon.ico) | 16×16 ICO |
 | Design tokens | [`assets/design-tokens.json`](../assets/design-tokens.json) | Machine-readable tokens |
+| Brand fonts | [`assets/fonts/`](../assets/fonts/) | Self-hosted TTFs + [`fonts.css`](../assets/fonts/fonts.css) |
 
 ---
 
@@ -50,12 +51,16 @@ Two self-hosted typefaces (both available on Google Fonts):
 - **Body — "Libre Franklin"** (sans-serif). Used for all body text, navigation, buttons, and `h3`.
 
 ### @font-face (self-hosted)
-Both families are loaded from `assets/fonts/...` with `font-display: swap`.
+Both families ship in [`assets/fonts/`](../assets/fonts/) as TTF files with a ready-to-use
+[`fonts.css`](../assets/fonts/fonts.css) (all `@font-face` rules, `font-display: swap`). Both are licensed under the **SIL Open Font License 1.1**.
 
-- Brygada 1918 — weights 400, 500, 600, 700 (+ italics)
-- Libre Franklin — weights 100–900 (+ italics)
+- **Brygada 1918** — `assets/fonts/brygada-1918/` — weights 400, 500, 600, 700 (+ italics) = 8 files
+- **Libre Franklin** — `assets/fonts/libre-franklin/` — weights 100–900 (+ italics) = 18 files
 
+Import once, then reference by family name:
 ```css
+@import url("./assets/fonts/fonts.css");
+
 font-family: "Brygada 1918", Georgia, "Times New Roman", serif;   /* headings */
 font-family: "Libre Franklin", -apple-system, Arial, sans-serif;  /* body */
 ```
