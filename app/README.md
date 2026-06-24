@@ -1,60 +1,45 @@
-# App
+# App — Hardware Service Decision Copilot
 
-This folder will contain the application built during the course.
+The application built during the course. Stack chosen in the ADRs (see [`../docs/ADR/`](../docs/ADR/)):
 
-## How to start
+- **Backend:** Spring Boot (Java 21 language level), Maven, openai-java → OpenRouter (Chat Completions), Thumbnailator.
+- **Frontend:** Angular (standalone) + Angular Material + ngx-markdown.
+- **Topology:** two separate deployables; `ng serve` proxies `/api` to the backend in dev; Docker Compose for one-command local run.
 
-The app is scaffolded live during **Day 1–2** through a structured process:
+```
+app/
+  backend/    Spring Boot service (REST + SSE)   — see backend/README.md
+  frontend/   Angular SPA                         — see frontend/README.md
+```
 
-1. **Research** — use agents to research and validate the project idea
-2. **PRD** — generate a Product Requirements Document (`../docs/PRD-Product-Requirements-Document.md`)
-3. **ADR** — generate Architecture Decision Records (`../docs/ADR/`) to choose the tech stack
-4. **Scaffold** — use the chosen boilerplate (`create-next-app`, AI SDK starter, Mastra, etc.)
-5. **Implement** — build features with agents using TDD
+## Status of initialization
 
-## Checklist
+| Part | State |
+|---|---|
+| Backend skeleton (pom, main class, config, policies, smoke test) | Created by hand (buildable once Maven resolves deps). |
+| Maven Wrapper | **To generate** (needs network): `cd app/backend && mvn -N wrapper:wrapper`. |
+| Angular app | **To scaffold** (needs network): see [`frontend/README.md`](frontend/README.md). |
 
-Use this checklist during scaffolding. Some items are provided by the boilerplate (e.g. `create-next-app` ships `tsconfig.json`, ESLint config). Others you add explicitly.
+The agent's sandbox has no outbound network, so the two network-dependent generator
+steps above are run by a developer; everything else is in place.
 
-### Project setup
-- [ ] Choose framework (Next.js, Express+Vite, Mastra, other) — record in ADR
-- [ ] Initialize project (e.g. `npx create-next-app@latest` or equivalent)
-- [ ] TypeScript config (`tsconfig.json`)
-- [ ] Package manager chosen (npm / pnpm / bun)
+## Quick start (after the two generator steps)
 
-### Code quality
-- [ ] ESLint config (`eslint.config.js`)
-- [ ] Prettier config (`.prettierrc`, `.prettierignore`)
-- [ ] `.editorconfig` (optional but recommended)
+```bash
+# Backend
+cd app/backend && ./mvnw spring-boot:run         # :8080, /actuator/health
 
-### Testing
-- [ ] Unit/integration test runner (Vitest / Jest)
-- [ ] E2E test runner (Playwright)
-- [ ] Test setup file (e.g. `test-setup.ts` with Testing Library matchers)
+# Frontend (new terminal)
+cd app/frontend && npx ng serve                   # :4200, proxies /api -> :8080
 
-### Environment
-- [ ] `.env.example` with required env vars (API keys, ports)
-- [ ] `.env` created locally (gitignored)
-- [ ] `.gitignore` (node_modules, .env, build output, etc.)
+# Or both via Docker (after Dockerfiles are added in the implementation phase)
+docker compose up
+```
 
-### AI integration
-- [ ] Vercel AI SDK (`ai` package) or equivalent
-- [ ] API route / endpoint for chat
-- [ ] Model configuration (provider, model name, API key from env)
+## Environment
+Copy [`../.env.example`](../.env.example) to `.env` and set `OPENROUTER_API_KEY`
+(or `OPENAI_API_KEY`). See ADR-000 §7 for the full variable list.
 
-### Design
-- [ ] Design tokens (`../assets/design-tokens.json`)
-- [ ] Tailwind CSS or equivalent
-- [ ] Logo and favicon (`../assets/`)
-- [ ] Design system doc (`../docs/design-guidelines.md`)
-
-### Documentation
-- [ ] PRD (`../docs/PRD-Product-Requirements-Document.md`)
-- [ ] ADRs (`../docs/ADR/`)
-- [ ] AGENTS.md in `app/` with stack-specific rules
-
-## Notes
-
-- Don't create config files manually if the boilerplate provides them — it leads to conflicts.
-- Let the agent research and recommend the right boilerplate based on the ADR decisions.
-- Keep this folder organized: separate routes, components, domain logic, and tests.
+## Implementation
+Business logic is built **test-first** (TDD, per [`../AGENTS.md`](../AGENTS.md)) against the
+PRD and ADRs during the implementation phase — it is intentionally not pre-written here.
