@@ -4,11 +4,14 @@
 
 This is a **course project** for the "AI dla programistów — od pomysłu do MVP" training by JSystems — a **dedicated (closed) course for NBP (Narodowy Bank Polski)**, 12 participants, starting **2026-06-22**. The app is a multimodal AI assistant built live during the course. The domain, tech stack, and architecture are decided by the group through a structured process: research → PRD → ADR → implementation with agents.
 
-This is only the **base starting repository** for the course; concrete decisions are made live with the group.
+This started as the **base course repository**; the concrete stack and architecture were decided live with the group and are recorded in `docs/ADR/`.
 
-**Primary demo stack:** TypeScript/Node.js (Next.js, Vercel AI SDK).
-**Java may be used as the main backend language** for this NBP edition (Spring Boot, Spring AI — see `examples/agent-configs/`); the final choice is made with the group during the ADR phase.
-Participants may work in any language (Java, Python, C#, Go, Rust, etc.).
+**Decided stack (see `docs/ADR/`):** the app is the **Hardware Service Decision Copilot**.
+- **Backend:** Java 21 + Spring Boot 3.5 (Spring Web MVC) + Maven, calling OpenRouter via the **openai-java** SDK (Chat Completions).
+- **Frontend:** Angular + Angular Material + ngx-markdown (custom streaming chat).
+- **E2E:** Playwright against the real stack.
+
+(The base course materials reference an alternative TypeScript/Next.js + Vercel AI SDK demo stack; that path was **not** chosen for the NBP edition.)
 
 All user-facing text in **Polish**.
 
@@ -49,10 +52,18 @@ If the area has no suitable test infrastructure yet, add it as part of the task 
 
 ### Verification (required before every commit)
 
-Run the commands appropriate for the chosen stack. Typically for a TypeScript project:
+Run the commands appropriate for the changed scope:
+
+Backend (`app/backend/`):
 ```bash
-npm test             # unit/integration tests pass
-npm run lint         # ESLint — no errors
+./mvnw test            # JUnit tests pass
+./mvnw clean package   # build succeeds
+```
+
+Frontend (`app/frontend/`):
+```bash
+npm test             # unit tests pass
+npm run lint         # no lint errors
 npm run build        # build succeeds
 ```
 
@@ -90,9 +101,8 @@ Common libraries (resolve via `resolve-library-id` if the ID changes):
 
 | Library | Context7 ID |
 |---|---|
-| Vercel AI SDK | `/vercel/ai` |
-| Next.js | `/vercel/next.js` |
-| React | `/reactjs/react.dev` |
-| Tailwind CSS | `/tailwindlabs/tailwindcss.com` |
-| Shadcn/ui | `/shadcn-ui/ui` |
-| Mastra | `/mastra-ai/mastra` |
+| openai-java | `/openai/openai-java` |
+| Spring Boot | `/spring-projects/spring-boot` |
+| Angular | `/websites/angular_dev` |
+| Angular Material | `/websites/material_angular_dev` |
+| ngx-markdown | `/jfcere/ngx-markdown` |
