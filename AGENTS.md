@@ -6,9 +6,9 @@ This is a **course project** for the "AI dla programistów — od pomysłu do MV
 
 This is only the **base starting repository** for the course; concrete decisions are made live with the group.
 
-**Primary demo stack:** TypeScript/Node.js (Next.js, Vercel AI SDK).
-**Java may be used as the main backend language** for this NBP edition (Spring Boot, Spring AI — see `examples/agent-configs/`); the final choice is made with the group during the ADR phase.
-Participants may work in any language (Java, Python, C#, Go, Rust, etc.).
+**Accepted stack (per `docs/ADR/`):** **Java 21 + Spring Boot 3.5.x** (Maven) backend, **Angular** (standalone + Material) frontend, **`com.openai:openai-java` → OpenRouter** (Chat Completions) for LLM calls. Spring AI and the Vercel AI SDK were explicitly **rejected** in ADR-000/003.
+TypeScript/Node.js (Next.js, Vercel AI SDK) was the instructor's demo stack and remains in the course materials for reference, but is **not** the chosen implementation stack.
+Participants may still work in any language for their own exercises (Java, Python, C#, Go, Rust, etc.).
 
 All user-facing text in **Polish**.
 
@@ -49,11 +49,19 @@ If the area has no suitable test infrastructure yet, add it as part of the task 
 
 ### Verification (required before every commit)
 
-Run the commands appropriate for the chosen stack. Typically for a TypeScript project:
+Run the commands appropriate for the changed scope.
+
+Backend (`app/backend`, Spring Boot / Maven):
 ```bash
-npm test             # unit/integration tests pass
-npm run lint         # ESLint — no errors
-npm run build        # build succeeds
+./mvnw test          # JUnit 5 + Mockito unit/integration tests pass
+./mvnw verify        # full build + integration tests
+```
+
+Frontend (`app/frontend`, Angular):
+```bash
+npm test             # unit tests pass (Jasmine/Karma or Vitest)
+npm run lint         # no lint errors
+npm run build        # ng build succeeds
 ```
 
 Verify only the scope relevant to your change. If the change affects runtime behavior, confirm the app starts correctly.
@@ -86,13 +94,24 @@ A task is complete only when:
 
 ## Context7 MCP Library IDs
 
-Common libraries (resolve via `resolve-library-id` if the ID changes):
+Libraries for the accepted stack (per `docs/ADR/`). Resolve via `resolve-library-id` if an ID changes.
+
+**Backend (Java / Spring Boot):**
 
 | Library | Context7 ID |
 |---|---|
-| Vercel AI SDK | `/vercel/ai` |
-| Next.js | `/vercel/next.js` |
-| React | `/reactjs/react.dev` |
-| Tailwind CSS | `/tailwindlabs/tailwindcss.com` |
-| Shadcn/ui | `/shadcn-ui/ui` |
-| Mastra | `/mastra-ai/mastra` |
+| Spring Boot | `/spring-projects/spring-boot` |
+| Spring Framework | `/spring-projects/spring-framework` |
+| OpenAI Java SDK | `/openai/openai-java` |
+| OpenRouter (docs) | `/websites/openrouter_ai` |
+| Thumbnailator | `/coobird/thumbnailator` |
+| Jakarta Bean Validation | `/jakartaee/validation` |
+
+**Frontend (Angular):**
+
+| Library | Context7 ID |
+|---|---|
+| Angular | `/angular/angular` |
+| Angular CLI | `/angular/angular-cli` |
+| Angular Material & CDK | `/angular/components` |
+| ngx-markdown | `/jfcere/ngx-markdown` |
