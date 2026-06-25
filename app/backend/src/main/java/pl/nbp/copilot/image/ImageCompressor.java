@@ -19,8 +19,10 @@ public class ImageCompressor {
     }
 
     public byte[] compress(byte[] inputBytes, String contentType) throws IOException {
-        // Read dimensions to decide whether downscaling is needed
         var original = ImageIO.read(new ByteArrayInputStream(inputBytes));
+        if (original == null) {
+            throw new IllegalArgumentException("Nie można odczytać przesłanego pliku obrazu. Upewnij się, że plik jest poprawnym obrazem JPEG, PNG lub WebP.");
+        }
         int longEdge = Math.max(original.getWidth(), original.getHeight());
 
         var baos = new ByteArrayOutputStream();

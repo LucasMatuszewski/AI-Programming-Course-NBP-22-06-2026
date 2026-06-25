@@ -1,10 +1,46 @@
-# App
+# Hardware Service Decision Copilot — PoC
 
-This folder contains the application built during the course: the **Hardware Service Decision Copilot**.
+Samoobsługowa aplikacja webowa: klient wypełnia formularz, przesyła zdjęcie sprzętu i otrzymuje wstępną, doradczą decyzję AI (zwrot / reklamacja), a następnie rozmawia z agentem.
+
+> **Uwaga:** Decyzja jest niewiążąca — ostateczną decyzję podejmuje konsultant.
+
+## Wymagania
+
+- Java 21, Node.js 18+, npm 9+
+- `.env` z `OPENROUTER_API_KEY`, `OPENROUTER_BASE_URL`, `OPENROUTER_TEXT_MODEL`, `OPENROUTER_VISION_MODEL` (skopiuj z `.env.example`)
+
+## Uruchomienie (dev)
+
+```bash
+# Terminal 1 — Backend (port 8080)
+cd app/backend
+./mvnw spring-boot:run                                        # z żywym LLM
+./mvnw spring-boot:run -Dspring-boot.run.profiles=stub-llm   # ze stubbem (bez klucza)
+
+# Terminal 2 — Frontend (port 4200)
+cd app/frontend && npm install && npm start
+```
+
+Otwórz: **http://localhost:4200**
+
+## Stub-LLM — routing kategorii
+
+Wstaw prefix w polu "Model": `ELIGIBLE:...`, `NOT_ELIGIBLE:...`, `NEEDS_HUMAN_REVIEW:...`, `MORE_INFO_REQUIRED:...`
+
+## Testy
+
+```bash
+cd app/backend  && ./mvnw test           # 53 testy BE
+cd app/frontend && npm test -- --watch=false --browsers=ChromeHeadless  # 32 testy FE
+cd app/e2e      && npx playwright test   # E2E (wymaga uruchomionej aplikacji)
+```
+
+## Stack
 
 The stack is decided in `../docs/ADR/`:
 - **Backend** (`backend/`) — Java 21 + Spring Boot 3.5 (Spring Web MVC) + Maven; calls OpenRouter via the openai-java SDK.
-- **Frontend** (`frontend/`) — Angular + Angular Material + ngx-markdown (custom streaming chat).
+- **Frontend** (`frontend/`) — Angular 18 + Angular Material + ngx-markdown (custom streaming chat).
+- **E2E** (`e2e/`) — Playwright against the real stack (LLM stubbed).
 
 ## How to start
 

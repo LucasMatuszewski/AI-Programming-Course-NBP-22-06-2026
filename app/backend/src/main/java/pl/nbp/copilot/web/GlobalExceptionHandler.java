@@ -80,6 +80,12 @@ public class GlobalExceptionHandler {
             .body(new ErrorResponse("UNSUPPORTED_MEDIA_TYPE", ex.getMessage(), Map.of()));
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
+        return ResponseEntity.badRequest()
+            .body(new ErrorResponse("VALIDATION_ERROR", ex.getMessage(), Map.of()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneral(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
