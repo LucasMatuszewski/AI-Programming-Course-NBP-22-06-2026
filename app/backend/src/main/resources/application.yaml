@@ -1,0 +1,23 @@
+server:
+  port: 8080
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 15MB
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+app:
+  llm:
+    base-url: ${OPENROUTER_BASE_URL:https://openrouter.ai/api/v1}
+    api-key: ${OPENAI_API_KEY:${OPENROUTER_API_KEY:}}
+    vision-model: ${OPENROUTER_VISION_MODEL:${OPENROUTER_MODEL:openai/gpt-4o-mini}}
+    text-model: ${OPENROUTER_TEXT_MODEL:${OPENROUTER_MODEL:openai/gpt-4o-mini}}
+    app-url: ${OPENROUTER_APP_URL:}
+    app-title: ${OPENROUTER_APP_TITLE:Hardware Service Decision Copilot}
+  image:
+    max-long-edge: 1024
+    jpeg-quality: 0.85
