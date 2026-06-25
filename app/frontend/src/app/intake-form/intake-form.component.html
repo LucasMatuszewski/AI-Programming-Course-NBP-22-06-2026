@@ -155,6 +155,25 @@
         }
       </div>
 
+      <!-- Error / retry panel (AC-23) -->
+      @if (submitError()) {
+        <div class="error-panel" role="alert">
+          <mat-icon class="error-panel__icon">error_outline</mat-icon>
+          <div class="error-panel__content">
+            <p class="error-panel__message">{{ submitError() }}</p>
+            <button
+              mat-stroked-button
+              color="warn"
+              type="button"
+              (click)="onRetry()"
+              class="error-panel__retry"
+            >
+              Spróbuj ponownie
+            </button>
+          </div>
+        </div>
+      }
+
     </div>
   </form>
 </div>

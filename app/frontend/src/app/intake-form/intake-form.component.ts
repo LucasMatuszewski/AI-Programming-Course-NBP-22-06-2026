@@ -11,6 +11,8 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
+
 // Angular Material
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -22,6 +24,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 
 import { EQUIPMENT_CATEGORIES, RequestType } from '../models/models';
+import { CaseService } from '../services/case.service';
+import { SessionState } from '../state/session-state.service';
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 const MAX_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
@@ -46,6 +50,9 @@ const MAX_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
 })
 export class IntakeFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
+  private readonly caseService = inject(CaseService);
+  private readonly sessionState = inject(SessionState);
+  private readonly router = inject(Router);
 
   readonly categories = EQUIPMENT_CATEGORIES;
   readonly requestTypes: { value: RequestType; label: string }[] = [
@@ -75,6 +82,9 @@ export class IntakeFormComponent implements OnInit {
 
   /** Whether a submit is in flight */
   readonly isSubmitting = signal<boolean>(false);
+
+  /** Submit / service error message (for retry panel) */
+  readonly submitError = signal<string | null>(null);
 
   /** Reason field label — changes based on requestType */
   readonly reasonLabel = signal<string>('Opis (opcjonalny)');
@@ -158,8 +168,54 @@ export class IntakeFormComponent implements OnInit {
     if (this.form.invalid || this.isSubmitting()) {
       return;
     }
+
     this.isSubmitting.set(true);
-    // CaseService.createCase() is wired in step 4.6
+    this.submitError.set(null);
+
+    const formData = this.buildFormData();
+
+    this.caseService.createCase(formData).subscribe({
+      next: (result) => {
+        this.sessionState.setFromCaseResult(result);
+        this.isSubmitting.set(false);
+        this.router.navigate(['/chat', result.sessionId]);
+      },
+      error: (message: string) => {
+        this.submitError.set(message);
+        this.isSubmitting.set(false);
+        // Form values are preserved — no reset
+      },
+    });
+  }
+
+  /** Retry after error — re-call onSubmit without resetting form */
+  onRetry(): void {
+    this.submitError.set(null);
+    this.onSubmit();
+  }
+
+  private buildFormData(): FormData {
+    const fd = new FormData();
+    const v = this.form.value as {
+      requestType: string;
+      category: string;
+      modelName: string;
+      purchaseDate: Date;
+      reason: string;
+    };
+    fd.append('requestType', v.requestType);
+    fd.append('category', v.category);
+    fd.append('modelName', v.modelName);
+    // ISO date string (date-only)
+    const d = v.purchaseDate;
+    if (d) {
+      const iso = d.toISOString().substring(0, 10);
+      fd.append('purchaseDate', iso);
+    }
+    if (v.reason) fd.append('reason', v.reason);
+    const file = this.selectedFile();
+    if (file) fd.append('image', file, file.name);
+    return fd;
   }
 
   resetSubmitting(): void {

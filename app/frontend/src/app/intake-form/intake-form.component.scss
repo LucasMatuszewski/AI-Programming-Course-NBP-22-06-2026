@@ -130,3 +130,37 @@
     color: var(--nbp-text-secondary);
   }
 }
+
+// Error / retry panel
+.error-panel {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--nbp-error);
+  border-radius: var(--nbp-radius-md);
+  background: #fdecea;
+
+  &__icon {
+    color: var(--nbp-error);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__message {
+    margin: 0;
+    font-size: 14px;
+    color: var(--nbp-error);
+  }
+
+  &__retry {
+    align-self: flex-start;
+  }
+}
