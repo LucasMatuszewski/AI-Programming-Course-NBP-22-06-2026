@@ -6,6 +6,8 @@ export EDITOR=zed
 # https://code.claude.com/docs/en/permission-modes#skip-all-checks-with-bypasspermissions-mode
 alias clauded="claude --dangerously-skip-permissions"
 
+# TODO: add PowerShell script. Update skip permissions flags for headless mode. Update Model versions.
+
 # Claude Code backend switchers
 # Usage:
 #   claude-or [claude args...]        -> OpenRouter, default model: deepseek/deepseek-v3.2
@@ -67,7 +69,7 @@ claude-zai() {
   export ANTHROPIC_BASE_URL="https://api.z.ai/api/anthropic"
   export ANTHROPIC_API_KEY=""
   export ANTHROPIC_AUTH_TOKEN="${ZAI_API_KEY}"
-  export ANTHROPIC_DEFAULT_SONNET_MODEL="${CLAUDE_CODE_MODEL:-GLM-4.7}"
+  export ANTHROPIC_DEFAULT_SONNET_MODEL="${CLAUDE_CODE_MODEL:-GLM-5.2}"
   export ANTHROPIC_DEFAULT_OPUS_MODEL="${CLAUDE_CODE_MODEL:-GLM-4.7}"
   export ANTHROPIC_DEFAULT_HAIKU_MODEL="${CLAUDE_CODE_HAIKU_MODEL:-GLM-4.7}"
   export API_TIMEOUT_MS="3000000"
