@@ -60,6 +60,16 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Session not found or expired → 404 SESSION_NOT_FOUND.
+     */
+    @ExceptionHandler(SessionNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleSessionNotFound(SessionNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorDto("SESSION_NOT_FOUND", ex.getMessage()));
+    }
+
+    /**
      * Category wire-value unknown → 400 VALIDATION_ERROR.
      */
     @ExceptionHandler(CategoryMappingException.class)
