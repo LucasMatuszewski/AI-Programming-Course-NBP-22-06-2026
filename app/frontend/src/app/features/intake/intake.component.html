@@ -1,16 +1,18 @@
 <div class="page-container">
   <mat-card class="form-card">
     <mat-card-header>
-      <mat-card-title>Asystent reklamacji i zwrotów</mat-card-title>
-      <mat-card-subtitle>Wypełnij formularz, aby sprawdzić wstępną kwalifikację Twojego zgłoszenia.</mat-card-subtitle>
+      <mat-card-title>Zgłoś reklamację lub zwrot</mat-card-title>
+      <mat-card-subtitle>Wypełnij formularz i dołącz zdjęcie sprzętu, aby otrzymać wstępną ocenę zgłoszenia.</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
       @if (submitError()) {
-        <div class="error-banner" role="alert">
-          <mat-icon>error_outline</mat-icon>
-          <span>{{ submitError()!.message }}</span>
-          <span class="retry-hint">Twoje dane zostały zachowane. Możesz spróbować ponownie.</span>
+        <div class="error-banner" role="alert" #errorBanner tabindex="-1">
+          <mat-icon aria-hidden="true">error_outline</mat-icon>
+          <div class="error-banner__text">
+            <span class="error-banner__message">{{ submitError()!.message }}</span>
+            <span class="retry-hint">Twoje dane zostały zachowane. Popraw ewentualne błędy i spróbuj ponownie.</span>
+          </div>
         </div>
       }
 

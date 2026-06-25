@@ -1,4 +1,4 @@
-import { Component, OnDestroy, signal } from '@angular/core';
+import { Component, ElementRef, OnDestroy, ViewChild, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -8,7 +8,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import {
@@ -31,7 +30,6 @@ import { futureDateForbidden, fileTypeAllowed, fileSizeMax } from '../../shared/
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    MatNativeDateModule,
     MatProgressBarModule,
     MatSelectModule,
   ],
@@ -39,6 +37,8 @@ import { futureDateForbidden, fileTypeAllowed, fileSizeMax } from '../../shared/
   styleUrl: './intake.component.scss',
 })
 export class IntakeComponent implements OnDestroy {
+  @ViewChild('errorBanner') private errorBanner?: ElementRef<HTMLDivElement>;
+
   protected today = new Date();
 
   protected categoryEntries = Object.entries(EQUIPMENT_CATEGORY_LABELS).map(
@@ -142,6 +142,12 @@ export class IntakeComponent implements OnDestroy {
       error: (err: ApiError) => {
         this.submitError.set(err);
         this.submitting.set(false);
+        // Surface the banner even if the user submitted from the bottom of a long form.
+        setTimeout(() => {
+          const el = this.errorBanner?.nativeElement;
+          el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el?.focus();
+        }, 0);
       },
     });
   }

@@ -15,10 +15,21 @@ export async function* parseSseStream(body: ReadableStream<Uint8Array>): AsyncGe
         const eventLine = lines.find(l => l.startsWith('event:'));
         const dataLine = lines.find(l => l.startsWith('data:'));
         const eventType = eventLine?.slice('event:'.length).trim();
-        const data = dataLine?.slice('data:'.length).trim() ?? '';
+        // Raw payload after the `data:` prefix. We must NOT trim it: each token is a JSON-encoded
+        // string (e.g. `" pom"`), and trimming would destroy meaningful leading/trailing spaces.
+        const rawData = dataLine?.slice('data:'.length) ?? '';
         if (eventType === 'done') return;
-        if (eventType === 'error') throw new Error(data || 'LLM_UNAVAILABLE');
-        if (data) yield data;
+        if (eventType === 'error') throw new Error('LLM_UNAVAILABLE');
+        if (!rawData) continue;
+        // Each token is JSON-encoded by the backend so spaces, newlines and unicode survive intact.
+        let token: string;
+        try {
+          token = JSON.parse(rawData);
+        } catch {
+          // Fallback for any non-JSON frame: emit the raw payload as-is.
+          token = rawData;
+        }
+        if (token) yield token;
       }
     }
   } finally {

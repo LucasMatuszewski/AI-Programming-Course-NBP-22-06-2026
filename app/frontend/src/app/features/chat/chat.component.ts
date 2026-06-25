@@ -123,12 +123,17 @@ export class ChatComponent implements OnInit {
         });
       }
     } catch {
-      this.chatError.set('Nie udało się uzyskać odpowiedzi. Spróbuj ponownie.');
+      this.chatError.set('Nie udało się uzyskać odpowiedzi asystenta. Spróbuj ponownie za chwilę.');
+      // Restore the user's message so they can resend it.
+      this.messageInput.setValue(text);
     } finally {
       this.messages.update((msgs) => {
         const updated = [...msgs];
         const current = updated[assistantIdx];
-        if (current) {
+        if (current && !current.content) {
+          // Drop the empty assistant placeholder if the stream produced nothing.
+          updated.splice(assistantIdx, 1);
+        } else if (current) {
           updated[assistantIdx] = { ...current, streaming: false };
         }
         return updated;

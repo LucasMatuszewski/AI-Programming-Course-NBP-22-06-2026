@@ -1,10 +1,24 @@
+:host {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
 .chat-layout {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  max-width: 800px;
-  margin: 0 auto;
+  flex: 1;
+  min-height: 0;
+  /* Fill the shell main area minus header/footer, capped for readability */
+  height: calc(100vh - 220px);
+  min-height: 480px;
+  max-width: 860px;
+  width: 100%;
+  margin: 24px auto;
   background: #ffffff;
+  border: 1px solid #bfcedd;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .case-summary {

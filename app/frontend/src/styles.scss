@@ -36,8 +36,42 @@ $nbp-navy: (
   )
 );
 
+// NBP Blue (accent) — links & interactive accents
+$nbp-blue: (
+  50: #eaeff7,
+  100: #c9d6e9,
+  200: #a6bbd9,
+  300: #829fc9,
+  400: #6789bd,
+  500: #4a74b0,
+  600: #426aa6,
+  700: #385e9a,
+  800: #30528d,
+  900: #213c75,
+  A100: #c9d6e9,
+  A200: #4a74b0,
+  A400: #385e9a,
+  A700: #213c75,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(black, 0.87),
+    A200: white,
+    A400: white,
+    A700: white,
+  )
+);
+
 $primary: mat.m2-define-palette($nbp-navy, 500);
-$accent: mat.m2-define-palette(mat.$m2-amber-palette, A200);
+$accent: mat.m2-define-palette($nbp-blue, 500);
 
 $theme: mat.m2-define-light-theme((
   color: (primary: $primary, accent: $accent),
@@ -106,4 +140,22 @@ html, body {
 h1, h2, h3 {
   font-family: 'Brygada 1918', Georgia, 'Times New Roman', serif;
   color: #152e52;
+  font-weight: 500;
+}
+
+a {
+  color: #4a74b0;
+}
+
+/* Conservative, squared-off brand: small radii and a subtle card border (design-guidelines §5/§6) */
+.mat-mdc-card {
+  border: 1px solid #e2e2e2;
+  box-shadow: 0 1px 3px rgba(21, 46, 82, 0.08) !important;
+}
+
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button,
+.mat-mdc-unelevated-button {
+  border-radius: 4px !important;
+  letter-spacing: 0.2px;
 }
