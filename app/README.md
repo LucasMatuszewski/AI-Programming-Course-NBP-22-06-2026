@@ -10,36 +10,44 @@ The application built during the course. Stack chosen in the ADRs (see [`../docs
 app/
   backend/    Spring Boot service (REST + SSE)   — see backend/README.md
   frontend/   Angular SPA                         — see frontend/README.md
+  e2e/        Playwright E2E tests
 ```
 
-## Status of initialization
+## Status
 
 | Part | State |
 |---|---|
-| Backend skeleton (pom, main class, config, policies, smoke test) | Created by hand (buildable once Maven resolves deps). |
-| Maven Wrapper | **To generate** (needs network): `cd app/backend && mvn -N wrapper:wrapper`. |
-| Angular app | **To scaffold** (needs network): see [`frontend/README.md`](frontend/README.md). |
+| Backend (Spring Boot, REST + SSE, 140 tests) | Complete |
+| Frontend (Angular + Material, 49 tests, lint + build green) | Complete |
+| E2E (Playwright, 12/12 tests passing) | Complete |
 
-The agent's sandbox has no outbound network, so the two network-dependent generator
-steps above are run by a developer; everything else is in place.
+## Quick start
 
-## Quick start (after the two generator steps)
+### Prerequisites
+Copy [`../.env.example`](../.env.example) to `.env` (repo root) and set your API keys.
 
+### Backend
 ```bash
-# Backend
-cd app/backend && ./mvnw spring-boot:run         # :8080, /actuator/health
+# Linux / macOS / Git Bash
+cd app/backend && ./run-dev.sh
 
-# Frontend (new terminal)
-cd app/frontend && npx ng serve                   # :4200, proxies /api -> :8080
+# Windows PowerShell
+cd app\backend && .\run-dev.ps1
+```
+Backend starts on `:8080`. Health check: `/actuator/health`.
 
-# Or both via Docker (after Dockerfiles are added in the implementation phase)
-docker compose up
+### Frontend
+```bash
+cd app/frontend && npx ng serve      # :4200, proxies /api → :8080
+```
+
+### E2E tests (requires both services running)
+```bash
+cd app/e2e && npm test
 ```
 
 ## Environment
-Copy [`../.env.example`](../.env.example) to `.env` and set `OPENROUTER_API_KEY`
-(or `OPENAI_API_KEY`). See ADR-000 §7 for the full variable list.
+See [`../.env.example`](../.env.example) for all variables. Required: `OPENROUTER_API_KEY` (or `OPENAI_API_KEY`) plus `OPENROUTER_TEXT_MODEL` and `OPENROUTER_VISION_MODEL`.
 
 ## Implementation
-Business logic is built **test-first** (TDD, per [`../AGENTS.md`](../AGENTS.md)) against the
-PRD and ADRs during the implementation phase — it is intentionally not pre-written here.
+Business logic is built **test-first** (TDD, per [`../AGENTS.md`](../AGENTS.md)) against the PRD and ADRs.
