@@ -1,58 +1,87 @@
 import { test, expect } from '@playwright/test';
-import { fillAndSubmitForm, TEST_JPEG_PATH } from './helpers';
+import { fillAndSubmitForm, expectDecisionAndDisclaimer, IMAGES } from './helpers';
 
-// The exact disclaimer text injected by MessageComposer (TAC-003-08 / AC-24)
-const DISCLAIMER_FRAGMENT = 'wstępna, automatyczna ocena';
+/**
+ * End-to-end against the REAL stack (Angular → Spring Boot → OpenRouter). We assert STRUCTURE,
+ * never the model's exact wording (it is nondeterministic). See app/e2e/AGENTS.md.
+ */
 
 test.describe('Happy path — Reklamacja (complaint)', () => {
-  test('complete form → decision → chat flow', async ({ page }) => {
+  test('form → decision → streaming chat → off-topic declined', async ({ page }) => {
     await fillAndSubmitForm(page, {
       type: 'REKLAMACJA',
-      modelPrefix: 'Test Laptop',
-      reason: 'Ekran nie działa',
+      categoryLabel: 'Smartfony i telefony',
+      model: 'Apple iPhone 13',
+      reason: 'Ekran telefonu jest pęknięty, a dotyk nie reaguje w dolnej części.',
+      imagePath: IMAGES.phoneJpg,
     });
 
-    // Should navigate to /chat/:sessionId
-    await expect(page).toHaveURL(/\/chat\/.+/, { timeout: 15_000 });
+    // Navigated to chat with a valid decision + mandatory disclaimer
+    await expectDecisionAndDisclaimer(page);
 
-    // Case summary header visible
-    await expect(page.locator('.case-summary')).toBeVisible();
+    // Case summary reflects the submitted data
     await expect(page.locator('.case-summary')).toContainText('Reklamacja');
-    await expect(page.locator('.case-summary')).toContainText('Test Laptop');
+    await expect(page.locator('.case-summary')).toContainText('Apple iPhone 13');
 
-    // First assistant message rendered
-    await expect(page.locator('.messages-container')).toBeVisible({ timeout: 10_000 });
+    // First assistant message is rendered
+    await expect(page.locator('.messages-container .bubble.assistant').first()).toBeVisible();
 
-    // Decision label in chat
-    await expect(page.locator('body')).toContainText('Kwalifikuje się', { timeout: 10_000 });
-
-    // Mandatory disclaimer always present (TAC-003-08 / AC-24)
-    await expect(page.locator('body')).toContainText(DISCLAIMER_FRAGMENT, { timeout: 10_000 });
-
-    // Send a follow-up message
+    // Send a follow-up and assert the assistant bubble grows incrementally (real streaming)
     const composer = page.getByRole('textbox', { name: /Twoja wiadomość/ });
-    await composer.fill('Ile czasu mam na złożenie reklamacji?');
+    await composer.fill('Ile czasu mam na złożenie reklamacji telefonu?');
     await page.getByRole('button', { name: /Wyślij wiadomość/ }).click();
 
-    // Streaming response arrives (stub returns "Dziękujemy za pytanie.")
-    await expect(page.locator('body')).toContainText('Dziękujemy', { timeout: 15_000 });
+    const lastAssistant = page.locator('.messages-container .bubble.assistant').last();
+    // Wait until some text starts streaming in
+    await expect(lastAssistant).not.toHaveText('', { timeout: 30_000 });
+    const firstLen = (await lastAssistant.innerText()).length;
+    // Then assert it keeps growing (token-by-token)
+    await expect
+      .poll(async () => (await lastAssistant.innerText()).length, { timeout: 30_000 })
+      .toBeGreaterThan(firstLen);
 
-    // Send button re-enables when text is entered (disabled only while streaming or empty)
-    await composer.fill('Kolejne pytanie');
-    await expect(page.getByRole('button', { name: /Wyślij wiadomość/ })).not.toBeDisabled({ timeout: 10_000 });
+    // The send button is disabled while streaming and re-enables once text is entered again
+    await expect.poll(async () => {
+      await composer.fill('Dziękuję');
+      return page.getByRole('button', { name: /Wyślij wiadomość/ }).isEnabled();
+    }, { timeout: 30_000 }).toBe(true);
   });
 });
 
 test.describe('Happy path — Zwrot (return)', () => {
-  test('complete Zwrot form → decision → chat flow', async ({ page }) => {
+  test('form (no reason) → decision → disclaimer, with a WebP image', async ({ page }) => {
     await fillAndSubmitForm(page, {
       type: 'ZWROT',
-      modelPrefix: 'Test Laptop',
+      categoryLabel: 'Laptopy i komputery',
+      model: 'Lenovo ThinkPad',
+      imagePath: IMAGES.laptopWebp,
     });
 
-    await expect(page).toHaveURL(/\/chat\/.+/, { timeout: 15_000 });
+    await expectDecisionAndDisclaimer(page);
     await expect(page.locator('.case-summary')).toContainText('Zwrot');
-    await expect(page.locator('body')).toContainText('Kwalifikuje się', { timeout: 10_000 });
-    await expect(page.locator('body')).toContainText(DISCLAIMER_FRAGMENT, { timeout: 10_000 });
+  });
+});
+
+test.describe('Off-topic guardrail', () => {
+  test('off-topic follow-up is declined / redirected', async ({ page }) => {
+    await fillAndSubmitForm(page, {
+      type: 'ZWROT',
+      categoryLabel: 'Smartfony i telefony',
+      model: 'Samsung Galaxy',
+      imagePath: IMAGES.phoneJpeg,
+    });
+    await expectDecisionAndDisclaimer(page);
+
+    const composer = page.getByRole('textbox', { name: /Twoja wiadomość/ });
+    await composer.fill('Jaka jest dziś pogoda w Warszawie?');
+    await page.getByRole('button', { name: /Wyślij wiadomość/ }).click();
+
+    const lastAssistant = page.locator('.messages-container .bubble.assistant').last();
+    await expect(lastAssistant).not.toHaveText('', { timeout: 30_000 });
+    // Let the stream finish, then assert the model stayed on-topic (mentions reklamacja/zwrot,
+    // i.e. it redirected) rather than answering the weather question.
+    await expect
+      .poll(async () => (await lastAssistant.innerText()).toLowerCase(), { timeout: 30_000 })
+      .toMatch(/reklamacj|zwrot|zgłoszeni/);
   });
 });

@@ -1,62 +1,33 @@
-import { test, expect } from '@playwright/test';
-import { fillAndSubmitForm } from './helpers';
+import { test } from '@playwright/test';
+import { fillAndSubmitForm, expectDecisionAndDisclaimer, IMAGES } from './helpers';
 
 /**
- * StubLlmGateway routes by model name prefix:
- *   ELIGIBLE:*         → "Kwalifikuje się"
- *   NOT_ELIGIBLE:*     → "Nie kwalifikuje się"
- *   NEEDS_HUMAN_REVIEW:* → "Wymaga weryfikacji przez konsultanta"
- *   MORE_INFO_REQUIRED:* → "Wymagane dodatkowe informacje"
- *   (default)          → ELIGIBLE
- *
- * The mandatory disclaimer is appended deterministically by MessageComposer
- * for every category (TAC-003-08 / AC-24 / TAC-001-04).
+ * Image-format coverage against the REAL stack. We do NOT assert a specific decision category here —
+ * the live model is nondeterministic, so deterministic "signs-of-use ⇒ NOT_ELIGIBLE" logic is
+ * verified in BE integration tests (WireMock), not E2E (see app/e2e/AGENTS.md). Here we only prove
+ * that every declared image format flows end-to-end and yields ONE OF the four valid decisions plus
+ * the mandatory disclaimer.
  */
 
-const DISCLAIMER_FRAGMENT = 'wstępna, automatyczna ocena';
-
-const CATEGORIES = [
-  {
-    prefix: 'ELIGIBLE:Test',
-    expectedDecisionText: 'Kwalifikuje się',
-    tag: '@eligible',
-  },
-  {
-    prefix: 'NOT_ELIGIBLE:Test',
-    expectedDecisionText: 'Nie kwalifikuje się',
-    tag: '@not-eligible',
-  },
-  {
-    prefix: 'NEEDS_HUMAN_REVIEW:Test',
-    expectedDecisionText: 'Wymaga weryfikacji',
-    tag: '@needs-human-review',
-  },
-  {
-    prefix: 'MORE_INFO_REQUIRED:Test',
-    expectedDecisionText: 'dodatkowe informacje',
-    tag: '@more-info-required',
-  },
-] as const;
-
-test.describe('All 4 decision categories via StubLlmGateway', () => {
-  for (const { prefix, expectedDecisionText } of CATEGORIES) {
-    test(`decision category: ${prefix.split(':')[0]}`, async ({ page }) => {
-      await fillAndSubmitForm(page, {
-        type: 'ZWROT',
-        modelPrefix: prefix,
-      });
-
-      // Must navigate to chat
-      await expect(page).toHaveURL(/\/chat\/.+/, { timeout: 15_000 });
-
-      // Decision text visible somewhere on the page
-      await expect(page.locator('body')).toContainText(expectedDecisionText, { timeout: 15_000 });
-
-      // Disclaimer always present regardless of category (TAC-003-08 / AC-24)
-      await expect(page.locator('body')).toContainText(DISCLAIMER_FRAGMENT, { timeout: 5_000 });
-
-      // Case summary header shows the decision badge
-      await expect(page.locator('.decision-badge')).toBeVisible();
+test.describe('Decision is always a valid category + disclaimer (per format)', () => {
+  test('PNG laptop (Zwrot)', async ({ page }) => {
+    await fillAndSubmitForm(page, {
+      type: 'ZWROT',
+      categoryLabel: 'Laptopy i komputery',
+      model: 'HP EliteBook',
+      imagePath: IMAGES.laptopPng,
     });
-  }
+    await expectDecisionAndDisclaimer(page);
+  });
+
+  test('JPEG phone (Reklamacja)', async ({ page }) => {
+    await fillAndSubmitForm(page, {
+      type: 'REKLAMACJA',
+      categoryLabel: 'Smartfony i telefony',
+      model: 'Xiaomi Redmi',
+      reason: 'Bateria puchnie i obudowa się rozszczelnia.',
+      imagePath: IMAGES.phoneJpeg3,
+    });
+    await expectDecisionAndDisclaimer(page);
+  });
 });
