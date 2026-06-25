@@ -2,7 +2,41 @@
 
 @include mat.core();
 
-$primary: mat.m2-define-palette(mat.$m2-indigo-palette, 700);
+// NBP Navy as primary, NBP Blue as accent
+$nbp-navy: (
+  50: #e3e8ef,
+  100: #b9c6d7,
+  200: #8ba0bd,
+  300: #5d7aa3,
+  400: #3a5e8f,
+  500: #152e52,
+  600: #12294a,
+  700: #0e2240,
+  800: #0b1b37,
+  900: #06112a,
+  A100: #6fa5ff,
+  A200: #3c83ff,
+  A400: #0961ff,
+  A700: #0055ef,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(black, 0.87),
+    A200: white,
+    A400: white,
+    A700: white,
+  )
+);
+
+$primary: mat.m2-define-palette($nbp-navy, 500);
 $accent: mat.m2-define-palette(mat.$m2-amber-palette, A200);
 
 $theme: mat.m2-define-light-theme((
@@ -13,8 +47,63 @@ $theme: mat.m2-define-light-theme((
 
 @include mat.all-component-themes($theme);
 
+@font-face {
+  font-family: 'Brygada 1918';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('/assets/fonts/brygada-1918/Brygada1918-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Brygada 1918';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('/assets/fonts/brygada-1918/Brygada1918-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Brygada 1918';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('/assets/fonts/brygada-1918/Brygada1918-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Libre Franklin';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('/assets/fonts/libre-franklin/LibreFranklin-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Libre Franklin';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('/assets/fonts/libre-franklin/LibreFranklin-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Libre Franklin';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('/assets/fonts/libre-franklin/LibreFranklin-Bold.ttf') format('truetype');
+}
+
 html, body {
   height: 100%;
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-family: 'Libre Franklin', -apple-system, Arial, 'Noto Sans', sans-serif;
+  background: #f7f7f7;
+  color: #464646;
+}
+
+h1, h2, h3 {
+  font-family: 'Brygada 1918', Georgia, 'Times New Roman', serif;
+  color: #152e52;
 }
