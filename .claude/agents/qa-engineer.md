@@ -21,10 +21,16 @@ This is the **Hardware Service Decision Copilot** — a multimodal AI assistant 
 - `docs/ADR/000-main-architecture.md` — end-to-end flows and the global testing strategy
 - `docs/ADR/003-frontend.md` and `docs/ADR/001-backend-api.md` — the screens and endpoints under test
 - `AGENTS.md` — root project rules
+- `app/e2e/AGENTS.md` — the **authoritative** E2E rules; if it conflicts with anything weaker, it and the root `AGENTS.md` win — STOP and flag the conflict.
 
-## Test Strategy (per ADR)
+## Test Strategy (per ADR + app/e2e/AGENTS.md)
 
-E2E runs the **real stack** with **nothing mocked except the LLM** (stubbed/recorded OpenRouter). Cover the full form→decision→chat journey plus validation and retry paths (see the key scenarios in ADR-000 §10).
+**E2E mocks NOTHING.** The authoritative E2E gate runs the **real** stack end-to-end: real Angular → real Spring Boot → **real OpenRouter** with a real `OPENROUTER_API_KEY`. Never run the sign-off suite on the `stub-llm` profile, and never mock/stub/record the LLM in E2E (no WireMock, no canned JSON, no prefix-driven fakes). A stubbed E2E proves nothing — it once hid real bugs (BUG-001) and created false confidence.
+
+- **Deterministic category coverage** (signs-of-use ⇒ NOT_ELIGIBLE, etc.) lives in **BE integration tests with WireMock**, never in E2E against a live model.
+- **Assert structure, not LLM wording** (models are nondeterministic): navigation form→chat, the decision bubble shows **one of the four** categories, the mandatory disclaimer is always present, SSE renders incrementally, off-topic follow-ups are declined, and validation/retry paths (400/413/415, 502/503 with data preserved) behave.
+- Use **real device photos** from `assets/example-images-for-tests/` (JPEG/PNG/WebP) — never synthetic 1×1 / hex-blob images.
+- `stub-llm` exists only as a fast dev/demo lane; you may keep one clearly-labelled non-authoritative "smoke (stubbed)" run, but the sign-off gate is the real stack.
 
 ## QA Workflow
 
@@ -37,7 +43,10 @@ E2E runs the **real stack** with **nothing mocked except the LLM** (stubbed/reco
 6. If any step fails, document the bug; do not write automated tests yet.
 
 ### Phase 2: Automated E2E Tests
-Codify the verified working behavior using Playwright against the real stack (no mocking of our own API endpoints; stub only OpenRouter). Verify SSE chat streaming renders incrementally and the decision message always shows the mandatory disclaimer.
+Codify the verified working behavior using Playwright against the **real stack — nothing mocked, including a live OpenRouter call**. Verify SSE chat streaming renders incrementally and the decision message always shows the mandatory disclaimer.
+
+### Completion gate
+QA does **BOTH** — automated *and* manual. A task is **not** complete until the real-LLM path has been exercised end-to-end at least once **and** manually confirmed: drive the real app by hand (Playwright MCP), screenshot each step with real photos, and compare every screen against `docs/design-guidelines.md` and `assets/homepage.png` (NBP logo, navy header, no broken icons, Polish everywhere, disclaimer on every decision). "Tests pass" ≠ "the app works."
 
 ## Tooling
 
