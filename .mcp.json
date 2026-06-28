@@ -10,9 +10,7 @@
     "playwright": {
       "type": "stdio",
       "command": "npx",
-      "args": [
-        "@playwright/mcp@latest"
-      ],
+      "args": ["@playwright/mcp@latest"],
       "env": {},
       "enabled": false
     },
@@ -26,7 +24,8 @@
         "-classpath",
         "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.3.3\\plugins\\mcpserver\\lib\\mcpserver-frontend.jar;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.3.3\\lib\\util-8.jar;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.3.3\\lib\\module-intellij.libraries.ktor.client.cio.jar;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.3.3\\lib\\module-intellij.libraries.ktor.client.jar;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.3.3\\lib\\module-intellij.libraries.ktor.network.tls.jar;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.3.3\\lib\\module-intellij.libraries.ktor.io.jar;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.3.3\\lib\\module-intellij.libraries.ktor.utils.jar;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.3.3\\lib\\module-intellij.libraries.kotlinx.io.jar;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.3.3\\lib\\module-intellij.libraries.kotlinx.serialization.core.jar;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.3.3\\lib\\module-intellij.libraries.kotlinx.serialization.json.jar",
         "com.intellij.mcpserver.stdio.McpStdioRunnerKt"
-      ]
+      ],
+      "enabled": false
     }
   }
 }
