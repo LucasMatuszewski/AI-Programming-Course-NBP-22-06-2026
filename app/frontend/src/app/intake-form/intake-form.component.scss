@@ -1,0 +1,166 @@
+.intake-form {
+  max-width: 680px;
+  margin: 32px auto;
+  padding: 0 16px 48px;
+
+  &__title {
+    font-family: "Brygada 1918", Georgia, serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--nbp-text-heading);
+    margin-bottom: 8px;
+  }
+
+  &__subtitle {
+    font-size: 15px;
+    color: var(--nbp-text-secondary);
+    margin-bottom: 32px;
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__row {
+    display: flex;
+    gap: 16px;
+
+    mat-form-field {
+      flex: 1;
+    }
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+    }
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+// Image upload control
+.image-upload {
+  &__zone {
+    border: 2px dashed var(--nbp-border-subtle);
+    border-radius: var(--nbp-radius-md);
+    padding: 32px 16px;
+    text-align: center;
+    cursor: pointer;
+    background: var(--nbp-background-light);
+    transition: border-color 0.2s, background 0.2s;
+
+    &:hover,
+    &--drag-over {
+      border-color: var(--nbp-accent);
+      background: #f0f4fa;
+    }
+  }
+
+  &__icon {
+    font-size: 40px;
+    color: var(--nbp-accent);
+    margin-bottom: 8px;
+  }
+
+  &__label {
+    font-size: 14px;
+    color: var(--nbp-text-secondary);
+  }
+
+  &__browse {
+    color: var(--nbp-accent);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  &__hidden-input {
+    display: none;
+  }
+
+  &__preview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid var(--nbp-border-subtle);
+    border-radius: var(--nbp-radius-md);
+    background: var(--nbp-background-light);
+  }
+
+  &__thumbnail {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: var(--nbp-radius-sm);
+    border: 1px solid var(--nbp-border);
+  }
+
+  &__file-info {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  &__filename {
+    font-weight: 500;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__error {
+    color: var(--nbp-error);
+    font-size: 13px;
+    margin-top: 6px;
+  }
+}
+
+// Submit area
+.submit-area {
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  &__loading {
+    font-size: 14px;
+    color: var(--nbp-text-secondary);
+  }
+}
+
+// Error / retry panel
+.error-panel {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--nbp-error);
+  border-radius: var(--nbp-radius-md);
+  background: #fdecea;
+
+  &__icon {
+    color: var(--nbp-error);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__message {
+    margin: 0;
+    font-size: 14px;
+    color: var(--nbp-error);
+  }
+
+  &__retry {
+    align-self: flex-start;
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "e2e",
+  "version": "0.0.1",
+  "description": "Playwright E2E tests for Hardware Service Decision Copilot",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report",
+    "test:smoke": "playwright test --grep @smoke",
+    "install-browsers": "playwright install chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}

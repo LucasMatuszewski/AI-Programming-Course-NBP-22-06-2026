@@ -1,0 +1,43 @@
+// App shell styles
+
+.app-header {
+  background-color: var(--nbp-primary);
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  &__logo-link {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    text-decoration: none;
+  }
+
+  &__logo {
+    display: block;
+    // SVG with navy color — use CSS filter to render white on dark header
+    filter: brightness(0) invert(1);
+  }
+
+  &__title {
+    color: var(--nbp-text-on-dark);
+    font-family: "Libre Franklin", -apple-system, Arial, sans-serif;
+    font-size: 16.5px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+}
+
+.app-main {
+  min-height: calc(100vh - 75px);
+  background-color: var(--nbp-background);
+}

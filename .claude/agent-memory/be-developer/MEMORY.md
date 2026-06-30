@@ -1,0 +1,2 @@
+- [Project setup](project-setup.md) — Spring Boot 3.5.3 scaffold, package names, resolved library versions, pom.xml hook quirks
+- [Feedback on hooks](feedback-hooks.md) — The pom.xml Write security hook is nondeterministic; sometimes needs multiple retries
