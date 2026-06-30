@@ -1,4 +1,4 @@
-# AI w Programowaniu: Od Pomysłu do MVP
+# AI w Programowaniu: Od Pomysłu do MVP!!
 ### Szkolenie JSystems — kurs dedykowany dla NBP (Narodowy Bank Polski), 22.06.2026
 
 ---
