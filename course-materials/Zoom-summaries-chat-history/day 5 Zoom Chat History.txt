@@ -1,0 +1,355 @@
+2026-06-30 08:15:44 From Łukasz Matuszewski To Everyone:
+	https://crewai.com/
+
+	Framework do tworzenia zespołów (Crew) agentów.
+
+2026-06-30 08:20:25 From Łukasz Matuszewski To Everyone:
+	https://flowiseai.com/
+
+	Drag and Drop oparty o LangChain, LangGraph i LlamaIndex
+
+2026-06-30 08:23:39 From Łukasz Matuszewski To Everyone:
+	https://n8n.io/
+
+	Drag and Drop do automatyzacji biznesowych
+
+2026-06-30 08:31:25 From Łukasz Matuszewski To Everyone:
+	2 pierwsze są open source.
+	n8n jest tylko do zastosowań wewnętrznych
+
+2026-06-30 08:32:09 From Łukasz Matuszewski To Everyone:
+	https://sentry.io/welcome/
+
+	Debuggowanie, tracing, logi, profiling, itd.
+
+2026-06-30 08:35:10 From Łukasz Matuszewski To Everyone:
+	https://posthog.com/
+
+	Product observability, analityka, debuggowanie itd
+
+2026-06-30 08:50:57 From Łukasz Matuszewski To Everyone:
+	shift + tab - zmiana trybu pracy
+
+2026-06-30 08:56:58 From Łukasz Matuszewski To Everyone:
+	Chrome DevTools MCP
+	Playwright MCP
+
+2026-06-30 08:59:14 From Łukasz Matuszewski To Everyone:
+	Walidowanie ręcznie czy aplikacja w pełni działa - nie przez testy E2E automatyczne, tylko agent ręcznie klika:
+
+	we have fully working application, it should work now. please start both BE and FE and validate manually with Playwright MCP if all works.
+
+2026-06-30 09:11:59 From Łukasz Matuszewski To Everyone:
+	Moja aplikacja w pełni działająca:
+	https://github.com/LucasMatuszewski/AI-Programming-Course-NBP-22-06-2026/tree/electronic-complains-chat-app
+
+2026-06-30 09:27:39 From Łukasz Matuszewski To Everyone:
+	Plan na przyszłość z dokładnymi fragmentami kodu jak zaimplementować potem funckcjonalność persistance w aplikacji z lokalnymi modelami jak Gemma 4
+
+	https://github.com/LucasMatuszewski/AI-Programming-Course-NBP-22-06-2026/blob/electronic-complains-chat-app/docs/plans/2026-06-25-session-persistence.md
+
+	https://github.com/LucasMatuszewski/AI-Programming-Course-NBP-22-06-2026/blob/electronic-complains-chat-app/docs/ADR/004-persistence.md
+
+2026-06-30 09:50:08 From Kris To Everyone:
+	Bloker:  z modelem do rozpoznawania VISION ze zdjęcia telefonu... leci na open router na modelu do wizji:
+
+2026-06-30 09:50:12 From Kris To Everyone:
+	Problem leży po stronie konta OpenRouter — wszystkie modele (OpenAI, Google, Meta) są blokowane przez tę samą politykę danych, nie samym wyborem modelu.
+
+	Rozwiązanie: musisz wejść na https://openrouter.ai/settings/privacy i zmienić ustawienia Data Policy — najprawdopodobniej masz włączony tryb "Safe Mode" lub restrykcyjne guardrails, które blokują wszystkich dostawców.
+
+	Po zmianie ustawień nie trzeba restartować backendu — wystarczy ponownie wysłać formularz. Aktualnie backend działa z meta-llama/llama-3.2-11b-vision-instruct.
+
+2026-06-30 09:50:29 From Kris To Everyone:
+	czy ktoś ma taki bloker?
+
+2026-06-30 09:50:48 From Kris To Everyone:
+	przy playwright...
+
+2026-06-30 09:54:24 From Kris To Everyone:
+	{8AACE419-FD47-49F3-964D-0DBED6093A0F}.png
+
+2026-06-30 09:56:55 From Łukasz Matuszewski To Everyone:
+	PRD, ADR oraz Dsign Guidelines - dla ludzi i agentów
+
+	Plan - tylko dla agentów, dokładnie rozpisanie im zadań, jednorazowy
+
+	AGENTS.md - instrukcje o standardach kodu i workflow dla agentów ogólnym, dla każdego agenta pracującego w danym folderze (zagnieżdżając wyspecjalizowane instukcje w sub-folderach). Wgrywane zawsze przy czytaniu z danego folderu.
+
+	Skills - wiedza specjalistycznia i worflow, które nie zawsze są potrzebne każdemu agentowi. Wgrywane na życzenie.
+	Instrukcje proceduralne
+
+2026-06-30 09:57:11 From Łukasz Matuszewski To Everyone:
+	Sub-Agents...
+
+2026-06-30 09:59:02 From Łukasz Matuszewski To Everyone:
+	# OpenRouter API base URL
+	OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
+
+	# Text model for chat, decision, and policy reasoning
+	# Examples: openai/gpt-5.4-mini, openai/gpt-5.4, anthropic/claude-sonnet-4.5
+	OPENROUTER_TEXT_MODEL=openai/gpt-5.4-mini
+
+	# Vision model for multimodal image analysis
+	# Example: openai/gpt-5.4
+	OPENROUTER_VISION_MODEL=openai/gpt-5.4-mini
+
+	# Backward-compatible fallback model for local development
+	# Used only when a split model variable is missing outside production.
+	OPENROUTER_MODEL=openai/gpt-5.4-mini
+
+2026-06-30 10:04:00 From Kris To Everyone:
+	SUPER! BRAVO! Dziala! gpt-5.4-mini Działa! Model openai/gpt-5.4-mini przeszedł i aplikacja poprawnie przetworzyła zgłoszenie. Strona przeszła do widoku czatu z oceną AI:
+
+	Decyzja: Wymaga weryfikacji przez konsultanta
+
+2026-06-30 10:04:22 From Kris To Everyone:
+	{A4B85E9B-772E-4230-81EE-E403F1B7BB00}.png
+
+2026-06-30 10:06:48 From Damian To Everyone:
+	Przepraszam jakąś przerwe robimy?
+	Kris D.:😯
+
+2026-06-30 10:09:11 From Kris To Everyone:
+	na pewno używa już modelu LLM bo kuma co jest napisane jak zminilem na laptopa po telefonie... ;-)
+	{034A6F10-AA71-4A37-AA17-45B6A962B989}.png
+
+2026-06-30 10:13:54 From Łukasz Matuszewski To Everyone:
+	https://context7.com/enterprise
+
+2026-06-30 10:14:14 From Łukasz Matuszewski To Everyone:
+	https://upstash.com/blog/context7-enterprise
+
+2026-06-30 10:14:24 From Łukasz Matuszewski To Everyone:
+	https://context7.com/plans
+
+2026-06-30 10:17:36 From Łukasz Matuszewski To Everyone:
+	11:35 koniec przerwy
+
+2026-06-30 10:48:06 From Marcin To Everyone:
+	w edgu działa
+
+2026-06-30 10:48:10 From Marcin To Everyone:
+	w chromie nie
+
+2026-06-30 10:50:28 From Andrzej To Everyone:
+	Jeszcze analiza obrazu jest zamokowana, ale sobie poradzę ;)
+	Image 2026-06-30 at 114953.png
+
+2026-06-30 10:51:10 From Kris To Everyone:
+	uzywalem chrome na VM...
+
+2026-06-30 10:52:51 From Kris To Everyone:
+	w chrome działa z --sandbox na drugim oknie
+
+2026-06-30 10:56:19 From Łukasz Matuszewski To Everyone:
+	OPENROUTER_API_KEY
+
+2026-06-30 11:09:47 From Andrzej To Everyone:
+	Już działa
+	Image 2026-06-30 at 120937.png
+
+2026-06-30 11:10:03 From Łukasz Matuszewski To Everyone:
+	https://x.com/levelsio/status/2071162399864889705
+
+	Praca z agentem bezpośrednio na produkcji z PHP na VPS, deploy = podmiana plików php
+
+2026-06-30 11:17:06 From Łukasz Matuszewski To Everyone:
+	https://github.com/LucasMatuszewski/AI-Programming-Course-NBP-22-06-2026/blob/electronic-complains-chat-app/docs/PRD-Product-Requirements-Document.html
+
+	Dokumenty HTML zamiast MD
+
+2026-06-30 11:22:15 From Łukasz Matuszewski To Everyone:
+	Prompt dla HTML z MD:
+
+	Implement the /docs/PRD-*.md document as a more readable and interactive HTML document with nice UI that will help me visualize and explain the app idea to the course participants. Save this new HTML artifact next to the md file with PRD with the same name. Use design guidelines from @docs/design-guidelines.md
+
+2026-06-30 11:41:37 From Łukasz Matuszewski To Everyone:
+	Andrej Karpathy - używanie screenshots jako lepszego promptowania zamiast tekstu:
+	https://x.com/karpathy/status/1980397031542989305?lang=en
+
+2026-06-30 11:43:25 From Łukasz Matuszewski To Everyone:
+	https://github.com/sai-pullabhotla/jftp
+
+	Legacy kod - 14 lat - JAva jFTP
+
+2026-06-30 11:44:43 From Łukasz Matuszewski To Everyone:
+	stwórz testy automatyczne w playwright
+
+	vs
+
+	testuj manualnie z Playwright MCP
+
+2026-06-30 11:50:18 From Łukasz Matuszewski To Everyone:
+	Jeśli test automatyczny przechodzi a manualnie aplikacja nie działa, należy potem poprosić agenta aby na podstawie sesji w której wykrył problem używając Playwright lub Chrome DevTools ręcznie
+
+2026-06-30 11:54:46 From Łukasz Matuszewski To Everyone:
+	PS C:\Users\labuser> cd .\DEV\
+	PS C:\Users\labuser\DEV> git clone https://github.com/sai-pullabhotla/jftp.git
+
+2026-06-30 12:00:57 From Sebastian To Everyone:
+	?
+
+2026-06-30 12:00:59 From Sebastian To Everyone:
+	Image 2026-06-30 at 130054.png
+
+2026-06-30 12:16:39 From Łukasz Matuszewski To Everyone:
+	Legacy Code jFTP - example prompt:
+	https://github.com/LucasMatuszewski/AI-Programming-Course-NBP-22-06-2026/blob/electronic-complains-chat-app/course-materials/Prompt%20examples/Legacy-Code-JFTP-modernization.md
+
+2026-06-30 12:18:59 From Łukasz Matuszewski To Everyone:
+	You are in a legacy application in Java that is 14 years old. This application doesn't work currently, so you need to fix some basic issues to run this application for the first time and to install the dependencies. But before you do this, I want you to analyze the code, analyze all the dependencies, and confirm the versions of Java and other libraries we use here. I want you to analyze the design patterns and architecture of this application. This is an FTP client in Java. So you should focus now on understanding and analyzing this application to describe how it works and to make sure that you understand how it works and how to run this application.
+
+2026-06-30 12:23:31 From Marcin To Everyone:
+	yuxinlu1/gemma-4-12B-agentic-fable5-composer2.5-v2-3.5x-tau2-GGUF:Q6_K
+
+2026-06-30 12:24:25 From Marcin To Everyone:
+	bartowski/deepreinforce-ai_Ornith-1.0-9B-GGUF:Q6_K_L
+
+2026-06-30 12:28:00 From Łukasz Matuszewski To Everyone:
+	https://apps.microsoft.com/detail/9n0dx20hk701?hl=pl-PL&gl=PT
+
+	Emulator Terminala na Windows
+
+2026-06-30 12:35:38 From Łukasz Matuszewski To Everyone:
+	You should go deeper inside the folders and analyze the structure of the folders with a depth of 4. You should choose the files that seem to be the most important in this application, based on the structure and the tree that you will generate. You should also analyze the files to better understand the code standards, the version of Java, the design patterns, the design system, and the architecture of this application. So you will understand fully how it works, also based on the most important files. You should visit at least 10 files before you will decide to generate the summary.
+
+2026-06-30 12:37:10 From Łukasz Matuszewski To Everyone:
+	Also create AGENTS.md and CLAUDE.md (importing @AGENTS.md) files that will describe specifically for the agents how they can work in this project, what is here, and what the structure of this project is. It is very important that you emphasize in the AGENTS.md instructions for the agents that these files must be updated during the execution of the plan and during the modernization of the application, so that AGENTS.md instructions are continuously aligned with how this project actually looks after changes. Documentation of detailed parts of the application and how it all works should be saved in multiple files in Markdown in the /docs folder. However, documentation for the agents in AGENTS.md / CLAUDE.md files should be split into multiple specialized files in the individual parts of the system in nested folders for each specific part of the application.
+
+2026-06-30 12:37:12 From Łukasz Matuszewski To Everyone:
+	Make one general AGENTS.md file at the main level of the project, whereas the detailed descriptions and instructions for the agents in the individual parts of the project, make it already inside deeper folders, concerning only specific code fragments data.
+
+2026-06-30 12:38:54 From Łukasz Matuszewski To Everyone:
+	Koniec przerwy 14:10
+
+2026-06-30 13:12:27 From Łukasz Matuszewski To Everyone:
+	https://ankiety.jsystems.pl/
+	Lista obecności AI dla programistów – od pomysłu do MVP 22-06-2026 - 26-06-2026.pdf
+
+2026-06-30 13:14:29 From Arkadiusz To Everyone:
+	Gdzie jest ta lista z indentyfikatorami ?
+
+2026-06-30 13:16:12 From Kris To Everyone:
+	{A1BFFCD9-D8E1-4CBC-A290-C0961C84DCDC}.png
+
+2026-06-30 13:17:00 From Łukasz Matuszewski To Everyone:
+	Lista obecności AI dla programistów – od pomysłu do MVP 22-06-2026 - 26-06-2026 (2).pdf
+
+2026-06-30 13:17:51 From Marcin To Everyone:
+	nie działa
+
+2026-06-30 13:23:45 From Łukasz Matuszewski To Everyone:
+	npx skills add https://github.com/spillwavesolutions/design-doc-mermaid --skill design-doc-mermaid
+
+2026-06-30 13:23:50 From Łukasz Matuszewski To Everyone:
+	https://www.skills.sh/spillwavesolutions/design-doc-mermaid/design-doc-mermaid
+
+2026-06-30 13:23:57 From Łukasz Matuszewski To Everyone:
+	https://www.skills.sh/github/awesome-copilot/java-junit
+
+2026-06-30 13:24:18 From Łukasz Matuszewski To Everyone:
+	npx skills add https://github.com/github/awesome-copilot --skill java-junit
+
+2026-06-30 13:26:04 From Łukasz Matuszewski To Everyone:
+	https://www.skills.sh/jeffallan/claude-skills/java-architect
+
+	npx skills add https://github.com/jeffallan/claude-skills --skill java-architect
+
+2026-06-30 13:42:47 From Łukasz Matuszewski To Everyone:
+	/design-doc-mermaid use this skill to analyse data flows and user flows and add mermaid charts. follow instructions from the skill
+
+2026-06-30 13:50:34 From Łukasz Matuszewski To Everyone:
+	/java-junit I want you to analyze this application, which does not have any tests currently. It's a legacy old application, 14 years old, written in old Java. So you need to make sure that JUnit 5 will work here. Use our documentation to analyze the structure of the application, and based on the documentation choose the five most crucial most important components or parts of code for this application, or classes. And write unit tests for the five elements of this application that you think are most important for the functioning of this application.
+
+2026-06-30 13:55:35 From Kris To Everyone:
+	{F6CED8F0-89A4-420D-8044-EEA4F4FFF077}.png
+
+2026-06-30 13:55:59 From Kris To Everyone:
+	{38185DFD-37F2-4E5E-880A-2D891B289957}.png
+
+2026-06-30 13:58:31 From Sebastian To Łukasz Matuszewski (direct message):
+	ankieta niedostępna
+
+2026-06-30 14:04:15 From Łukasz Matuszewski To Everyone:
+	Try to run this application with minimal changes. Introduce such changes that will be minimally needed for this application to start at the beginning. If you need any new modules or programs try to install them or let me know what I should do - provide instructions, use context7 to check latest docs for mvn and other libriaries we use in this application
+
+2026-06-30 14:11:29 From Łukasz Matuszewski To Everyone:
+	Code Review automatyczne:
+
+	https://code.claude.com/docs/en/code-review
+	https://chatgpt.com/codex/cloud/settings/code-review
+
+2026-06-30 14:30:49 From Łukasz Matuszewski To Everyone:
+	Qodu Code Review
+
+	Przykład GH Action:
+	https://github.com/LucasMatuszewski/AI-Programming-Course-NBP-22-06-2026/blob/main/course-materials/cicd-headless/github-actions/qodo-pr-agent-review.yml
+
+2026-06-30 14:30:55 From Łukasz Matuszewski To Everyone:
+	https://docs.qodo.ai/code-review
+
+2026-06-30 14:31:01 From Łukasz Matuszewski To Everyone:
+	https://www.qodo.ai/
+
+2026-06-30 14:33:14 From Łukasz Matuszewski To Everyone:
+	Open Code headless:
+	https://opencode.ai/docs/cli/
+
+	`opencode run "Explain how closures work in JavaScript"`
+
+2026-06-30 14:49:49 From Marcin To Łukasz Matuszewski (direct message):
+	muszę dzisiaj wcześniej opuścić szkolenie, ankietę postaram się zrobić później, dziękuje
+
+2026-06-30 14:51:44 From Łukasz Matuszewski To Everyone:
+	https://v0.app/
+
+2026-06-30 14:52:30 From Łukasz Matuszewski To Everyone:
+    V0 Referal Link - we both get $5 credits
+	https://v0.app/ref/HDACI3
+
+2026-06-30 14:52:49 From Łukasz Matuszewski To Everyone:
+	https://lovable.dev/dashboard
+
+2026-06-30 14:54:08 From Łukasz Matuszewski To Everyone:
+	https://bolt.new/
+
+2026-06-30 14:54:39 From Łukasz Matuszewski To Everyone:
+	https://replit.com/
+
+2026-06-30 14:55:54 From Łukasz Matuszewski To Everyone:
+	https://aistudio.google.com/apps/f3f80ee8-2b62-41a3-84bb-79d5f97f8558?showAssistant=true&project=gen-lang-client-0894392159&showPreview=true
+
+2026-06-30 14:56:46 From Łukasz Matuszewski To Everyone:
+	https://ai.studio/apps/f3f80ee8-2b62-41a3-84bb-79d5f97f8558
+
+2026-06-30 14:56:58 From Łukasz Matuszewski To Everyone:
+	Android app - emulator w AI Studio od Google
+
+2026-06-30 14:59:57 From Łukasz Matuszewski To Everyone:
+	https://www.olx.pl/ Analyze in detail this website. Look at all design aspects or design tokens and create an ideal clone of this application. Make screens to ensure that you created an application that looks exactly the same. So you should make screens of the original application and of the application you will create.
+
+	(Strona olx.pl blokuje teraz boty AI - agent użył innych źródeł)
+
+2026-06-30 15:01:48 From Łukasz Matuszewski To Everyone:
+	CRM Template:
+	https://v0.app/templates/salesops-dashboard-9q2Mfgu6cDi
+
+2026-06-30 15:09:32 From Łukasz Matuszewski To Everyone:
+	https://v0.app/chat/olx-pl-website-analysis-p4dV5Zphzfg?ref=HDACI3
+
+2026-06-30 15:11:02 From Łukasz Matuszewski To Everyone:
+	https://v0.app/chat/financial-dashboard-JhmLfRWkiY2?ref=HDACI3
+
+2026-06-30 15:12:02 From Łukasz Matuszewski To Everyone:
+	Lista obecności AI dla programistów – od pomysłu do MVP 22-06-2026 - 26-06-2026 (2).pdf
+
+2026-06-30 15:16:02 From Kris To Everyone:
+	{A69C7FDC-1C28-4ACC-88DC-EDBB0B6099CE}.png
+
+2026-06-30 15:23:48 From Łukasz Matuszewski To Everyone:
+	https://github.com/LucasMatuszewski/AI-Programming-Course-NBP-22-06-2026/tree/electronic-complains-chat-app/course-materials/opencode-example
+
+	OpenCode example config
+
+	custom model - przykład dla Ollama
