@@ -27,6 +27,8 @@ All user-facing text in **Polish**.
 
 ```
 app/                 Application built during the course (start: empty scaffold)
+  /e2e               Automated Playwright e2e tests
+  /backend
 assets/              Design tokens, logo, favicon
 docs/                PRD, ADR, design system
 course-materials/    Notes, scripts, examples, research
@@ -91,8 +93,21 @@ Verify only the scope relevant to your change. If the change affects runtime beh
 A task is complete only when:
 - Implementation matches the relevant PRD, ADR, and design guidance
 - Tests were written first and pass honestly
+- You verified manually with Playwright CLI/MCP that application really works
 - Verification for the changed scope passed with no errors or warnings
 - The commit message is focused and the repository is in a consistent, reviewable state
+
+---
+
+## LLMs
+openai/gpt-5.4-mini
+Never use models you know, like gpt-4o-mini
+
+## Use documentation, not you knowledge
+
+Your knowledge is outdated! use contex7
+Contex7 on premisses
+wlasny RAG z dokumentacj lub pliki md w repo
 
 ---
 
