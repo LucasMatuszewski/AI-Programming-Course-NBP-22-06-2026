@@ -1,0 +1,54 @@
+# Hardware Service Decision Copilot — Backend configuration
+# Env-var bindings use Spring relaxed binding (e.g. APP_SESSION_TTL_MINUTES -> app.session.ttl-minutes).
+# See docs/ADR/000-main-architecture.md §7 for the full env-var table.
+
+server:
+  port: ${SERVER_PORT:8080}
+
+# ─── Application-specific settings ──────────────────────────────────────────
+app:
+  session:
+    # In-memory session TTL (minutes). Env: APP_SESSION_TTL_MINUTES
+    ttl-minutes: ${APP_SESSION_TTL_MINUTES:60}
+  image:
+    # Maximum accepted upload size in bytes (10 MB default). Env: APP_IMAGE_MAX_BYTES
+    max-bytes: ${APP_IMAGE_MAX_BYTES:10485760}
+  cors:
+    # Angular dev-server origin. Env: APP_CORS_ALLOWED_ORIGIN
+    allowed-origin: ${APP_CORS_ALLOWED_ORIGIN:http://localhost:4200}
+
+# ─── LLM / OpenRouter settings ───────────────────────────────────────────────
+# Used by OpenAiClientConfig to build the openai-java SDK client bean.
+# OPENAI_API_KEY takes precedence over OPENROUTER_API_KEY when both are set
+# (application code enforces this; see ADR-000 §7).
+openrouter:
+  api-key: ${OPENROUTER_API_KEY:}
+  base-url: ${OPENROUTER_BASE_URL:https://openrouter.ai/api/v1}
+  text-model: ${OPENROUTER_TEXT_MODEL:openai/gpt-4o-mini}
+  vision-model: ${OPENROUTER_VISION_MODEL:openai/gpt-4o-mini}
+
+# Optional override — if OPENAI_API_KEY is set it takes precedence over openrouter.api-key
+openai:
+  api-key: ${OPENAI_API_KEY:}
+
+# ─── Spring Boot Actuator ────────────────────────────────────────────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+
+# ─── Multipart limits ────────────────────────────────────────────────────────
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 12MB
+
+# ─── Logging ─────────────────────────────────────────────────────────────────
+logging:
+  level:
+    pl.nbp.copilot: INFO

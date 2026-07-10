@@ -1,60 +1,53 @@
-# App
+# App — Hardware Service Decision Copilot
 
-This folder will contain the application built during the course.
+The application built during the course. Stack chosen in the ADRs (see [`../docs/ADR/`](../docs/ADR/)):
 
-## How to start
+- **Backend:** Spring Boot (Java 21 language level), Maven, openai-java → OpenRouter (Chat Completions), Thumbnailator.
+- **Frontend:** Angular (standalone) + Angular Material + ngx-markdown.
+- **Topology:** two separate deployables; `ng serve` proxies `/api` to the backend in dev; Docker Compose for one-command local run.
 
-The app is scaffolded live during **Day 1–2** through a structured process:
+```
+app/
+  backend/    Spring Boot service (REST + SSE)   — see backend/README.md
+  frontend/   Angular SPA                         — see frontend/README.md
+  e2e/        Playwright E2E tests
+```
 
-1. **Research** — use agents to research and validate the project idea
-2. **PRD** — generate a Product Requirements Document (`../docs/PRD-Product-Requirements-Document.md`)
-3. **ADR** — generate Architecture Decision Records (`../docs/ADR/`) to choose the tech stack
-4. **Scaffold** — use the chosen boilerplate (`create-next-app`, AI SDK starter, Mastra, etc.)
-5. **Implement** — build features with agents using TDD
+## Status
 
-## Checklist
+| Part | State |
+|---|---|
+| Backend (Spring Boot, REST + SSE, 140 tests) | Complete |
+| Frontend (Angular + Material, 49 tests, lint + build green) | Complete |
+| E2E (Playwright, 12/12 tests passing) | Complete |
 
-Use this checklist during scaffolding. Some items are provided by the boilerplate (e.g. `create-next-app` ships `tsconfig.json`, ESLint config). Others you add explicitly.
+## Quick start
 
-### Project setup
-- [ ] Choose framework (Next.js, Express+Vite, Mastra, other) — record in ADR
-- [ ] Initialize project (e.g. `npx create-next-app@latest` or equivalent)
-- [ ] TypeScript config (`tsconfig.json`)
-- [ ] Package manager chosen (npm / pnpm / bun)
+### Prerequisites
+Copy [`../.env.example`](../.env.example) to `.env` (repo root) and set your API keys.
 
-### Code quality
-- [ ] ESLint config (`eslint.config.js`)
-- [ ] Prettier config (`.prettierrc`, `.prettierignore`)
-- [ ] `.editorconfig` (optional but recommended)
+### Backend
+```bash
+# Linux / macOS / Git Bash
+cd app/backend && ./run-dev.sh
 
-### Testing
-- [ ] Unit/integration test runner (Vitest / Jest)
-- [ ] E2E test runner (Playwright)
-- [ ] Test setup file (e.g. `test-setup.ts` with Testing Library matchers)
+# Windows PowerShell
+cd app\backend && .\run-dev.ps1
+```
+Backend starts on `:8080`. Health check: `/actuator/health`.
 
-### Environment
-- [ ] `.env.example` with required env vars (API keys, ports)
-- [ ] `.env` created locally (gitignored)
-- [ ] `.gitignore` (node_modules, .env, build output, etc.)
+### Frontend
+```bash
+cd app/frontend && npx ng serve      # :4200, proxies /api → :8080
+```
 
-### AI integration
-- [ ] Vercel AI SDK (`ai` package) or equivalent
-- [ ] API route / endpoint for chat
-- [ ] Model configuration (provider, model name, API key from env)
+### E2E tests (requires both services running)
+```bash
+cd app/e2e && npm test
+```
 
-### Design
-- [ ] Design tokens (`../assets/design-tokens.json`)
-- [ ] Tailwind CSS or equivalent
-- [ ] Logo and favicon (`../assets/`)
-- [ ] Design system doc (`../docs/design-guidelines.md`)
+## Environment
+See [`../.env.example`](../.env.example) for all variables. Required: `OPENROUTER_API_KEY` (or `OPENAI_API_KEY`) plus `OPENROUTER_TEXT_MODEL` and `OPENROUTER_VISION_MODEL`.
 
-### Documentation
-- [ ] PRD (`../docs/PRD-Product-Requirements-Document.md`)
-- [ ] ADRs (`../docs/ADR/`)
-- [ ] AGENTS.md in `app/` with stack-specific rules
-
-## Notes
-
-- Don't create config files manually if the boilerplate provides them — it leads to conflicts.
-- Let the agent research and recommend the right boilerplate based on the ADR decisions.
-- Keep this folder organized: separate routes, components, domain logic, and tests.
+## Implementation
+Business logic is built **test-first** (TDD, per [`../AGENTS.md`](../AGENTS.md)) against the PRD and ADRs.

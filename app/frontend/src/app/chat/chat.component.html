@@ -1,0 +1,87 @@
+<div class="chat-screen">
+  <!-- Toolbar -->
+  <div class="chat-toolbar">
+    <span class="chat-toolbar__title">Asystent serwisowy</span>
+    <button mat-stroked-button (click)="onNewCase()" class="chat-toolbar__new">
+      <mat-icon>add_circle_outline</mat-icon>
+      Nowe zgłoszenie
+    </button>
+  </div>
+
+  <!-- Messages area -->
+  <div class="chat-messages" role="log" aria-live="polite" aria-label="Historia rozmowy">
+    @for (msg of messages; track msg.createdAt; let i = $index) {
+      @if (isFirstSystemMessage(msg, i)) {
+        <!-- First system bubble: decision message with status chip -->
+        <div class="chat-bubble chat-bubble--system">
+          @if (decision) {
+            <div class="status-chip {{ getStatusChip(decision.outcome).cssClass }}">
+              <mat-icon class="status-chip__icon">{{ getStatusChip(decision.outcome).icon }}</mat-icon>
+              <span class="status-chip__label">{{ getStatusChip(decision.outcome).label }}</span>
+            </div>
+          }
+          <div class="chat-bubble__markdown">
+            <markdown [data]="msg.content" />
+          </div>
+        </div>
+      } @else if (msg.role === 'user') {
+        <div class="chat-bubble chat-bubble--user">
+          <p class="chat-bubble__text">{{ msg.content }}</p>
+        </div>
+      } @else {
+        <!-- Assistant message (may be streaming) -->
+        <div class="chat-bubble chat-bubble--assistant">
+          <div class="chat-bubble__markdown">
+            <markdown [data]="msg.content" />
+          </div>
+        </div>
+      }
+    }
+
+    <!-- Typing indicator while streaming -->
+    @if (isStreaming()) {
+      <div class="chat-bubble chat-bubble--assistant chat-bubble--typing" aria-label="Asystent pisze">
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+      </div>
+    }
+
+    <!-- Inline stream error -->
+    @if (streamError()) {
+      <div class="chat-error" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ streamError() }}</span>
+      </div>
+    }
+
+    <!-- Scroll anchor -->
+    <div #scrollAnchor></div>
+  </div>
+
+  <!-- Message input -->
+  <div class="chat-input-area">
+    <mat-form-field appearance="outline" class="chat-input-area__field">
+      <textarea
+        matInput
+        [(ngModel)]="messageInput"
+        (keydown)="onKeyDown($event)"
+        [disabled]="isStreaming()"
+        rows="2"
+        placeholder="Napisz wiadomość… (Enter aby wysłać)"
+        aria-label="Wiadomość do asystenta"
+      ></textarea>
+    </mat-form-field>
+    <button
+      mat-flat-button
+      color="primary"
+      class="chat-input-area__send"
+      (click)="onSendMessage()"
+      [disabled]="isStreaming() || !messageInput.trim()"
+      aria-label="Wyślij wiadomość"
+    >
+      <mat-icon>send</mat-icon>
+      Wyślij
+    </button>
+  </div>
+</div>

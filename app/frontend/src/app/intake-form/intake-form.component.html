@@ -1,0 +1,179 @@
+<div class="intake-form">
+  <h1 class="intake-form__title">Nowe zgłoszenie serwisowe</h1>
+  <p class="intake-form__subtitle">
+    Wypełnij formularz, aby uzyskać wstępną ocenę Twojego zgłoszenia reklamacyjnego lub zwrotu.
+    Decyzja jest wstępna i niezobowiązująca prawnie.
+  </p>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="intake-form__section">
+
+      <!-- Request type + Category row -->
+      <div class="intake-form__row">
+        <mat-form-field appearance="outline">
+          <mat-label>Typ zgłoszenia *</mat-label>
+          <mat-select formControlName="requestType">
+            @for (rt of requestTypes; track rt.value) {
+              <mat-option [value]="rt.value">{{ rt.label }}</mat-option>
+            }
+          </mat-select>
+          @if (form.get('requestType')?.invalid && form.get('requestType')?.touched) {
+            <mat-error>Wybierz typ zgłoszenia.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Kategoria sprzętu *</mat-label>
+          <mat-select formControlName="category">
+            @for (cat of categories; track cat.value) {
+              <mat-option [value]="cat.value">{{ cat.label }}</mat-option>
+            }
+          </mat-select>
+          @if (form.get('category')?.invalid && form.get('category')?.touched) {
+            <mat-error>Wybierz kategorię sprzętu.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <!-- Model + Date row -->
+      <div class="intake-form__row">
+        <mat-form-field appearance="outline">
+          <mat-label>Model / Nazwa urządzenia *</mat-label>
+          <input matInput formControlName="modelName" placeholder="np. Samsung Galaxy A53" />
+          @if (form.get('modelName')?.invalid && form.get('modelName')?.touched) {
+            <mat-error>Podaj model urządzenia.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data zakupu *</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            [max]="today"
+            formControlName="purchaseDate"
+            placeholder="dd.mm.rrrr"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="picker" />
+          <mat-datepicker #picker />
+          @if (form.get('purchaseDate')?.errors?.['required'] && form.get('purchaseDate')?.touched) {
+            <mat-error>Data zakupu jest wymagana.</mat-error>
+          }
+          @if (form.get('purchaseDate')?.errors?.['matDatepickerMax']) {
+            <mat-error>Data zakupu nie może być w przyszłości.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <!-- Reason textarea -->
+      <mat-form-field appearance="outline">
+        <mat-label>{{ reasonLabel() }}</mat-label>
+        <textarea
+          matInput
+          formControlName="reason"
+          rows="4"
+          [placeholder]="reasonHint()"
+        ></textarea>
+        @if (form.get('reason')?.errors?.['required'] && form.get('reason')?.touched) {
+          <mat-error>Opis defektu jest wymagany dla reklamacji.</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Image upload -->
+      <div>
+        @if (!selectedFile()) {
+          <div
+            class="image-upload__zone"
+            (dragover)="onDragOver($event)"
+            (drop)="onDrop($event)"
+          >
+            <div class="image-upload__icon">
+              <mat-icon>cloud_upload</mat-icon>
+            </div>
+            <p class="image-upload__label">
+              Przeciągnij i upuść zdjęcie lub
+              <label class="image-upload__browse">
+                wybierz plik
+                <input
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.webp"
+                  class="image-upload__hidden-input"
+                  (change)="onFileInputChange($event)"
+                />
+              </label>
+            </p>
+            <p style="font-size: 12px; color: var(--nbp-text-secondary); margin: 4px 0 0;">
+              Formaty: JPG, JPEG, PNG, WEBP · Maks. 10 MB
+            </p>
+          </div>
+        } @else {
+          <div class="image-upload__preview">
+            <img
+              [src]="thumbnailUrl()"
+              alt="Podgląd zdjęcia"
+              class="image-upload__thumbnail"
+            />
+            <div class="image-upload__file-info">
+              <div class="image-upload__filename">{{ selectedFile()?.name }}</div>
+              <div style="font-size: 12px; color: var(--nbp-text-secondary);">
+                {{ (selectedFile()?.size ?? 0) / (1024 * 1024) | number:'1.1-2' }} MB
+              </div>
+            </div>
+            <button
+              type="button"
+              mat-icon-button
+              (click)="removeImage()"
+              aria-label="Usuń zdjęcie"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        }
+
+        @if (imageError()) {
+          <p class="image-upload__error">{{ imageError() }}</p>
+        }
+      </div>
+
+      <!-- Submit -->
+      <div class="submit-area">
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          [disabled]="submitDisabled"
+          aria-label="Wyślij zgłoszenie"
+        >
+          @if (isSubmitting()) {
+            <mat-spinner diameter="18" style="display: inline-block; margin-right: 8px;" />
+          }
+          Wyślij zgłoszenie
+        </button>
+
+        @if (isSubmitting()) {
+          <span class="submit-area__loading">Analizujemy zdjęcie i Twoje zgłoszenie…</span>
+        }
+      </div>
+
+      <!-- Error / retry panel (AC-23) -->
+      @if (submitError()) {
+        <div class="error-panel" role="alert">
+          <mat-icon class="error-panel__icon">error_outline</mat-icon>
+          <div class="error-panel__content">
+            <p class="error-panel__message">{{ submitError() }}</p>
+            <button
+              mat-stroked-button
+              color="warn"
+              type="button"
+              (click)="onRetry()"
+              class="error-panel__retry"
+            >
+              Spróbuj ponownie
+            </button>
+          </div>
+        </div>
+      }
+
+    </div>
+  </form>
+</div>

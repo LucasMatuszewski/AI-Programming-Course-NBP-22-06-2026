@@ -1,0 +1,165 @@
+// =============================================================================
+// NBP Hardware Service Decision Copilot — Global Styles
+// Angular Material M3 + NBP brand theme
+// =============================================================================
+
+// 1. @use rules MUST appear first (Sass requirement)
+// -----------------------------------------------------------------------------
+@use '@angular/material' as mat;
+
+// 2. Angular Material M3 Theme definition
+// -----------------------------------------------------------------------------
+@include mat.core();
+
+$nbp-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$azure-palette,
+    tertiary: mat.$blue-palette,
+  ),
+  typography: (
+    brand-family: ('Brygada 1918', Georgia, 'Times New Roman', serif),
+    plain-family: ('Libre Franklin', -apple-system, Arial, sans-serif),
+    bold-weight: 700,
+    medium-weight: 500,
+    regular-weight: 400,
+  ),
+  density: (scale: 0),
+));
+
+html {
+  @include mat.all-component-themes($nbp-theme);
+  @include mat.system-level-colors($nbp-theme);
+  @include mat.system-level-typography($nbp-theme);
+}
+
+// 3. NBP Design Tokens as CSS Custom Properties
+// -----------------------------------------------------------------------------
+:root {
+  // Brand colors
+  --nbp-primary:          #152E52;
+  --nbp-accent:           #4A74B0;
+  --nbp-gold:             #E8D499;
+
+  // Backgrounds
+  --nbp-background:       #FFFFFF;
+  --nbp-background-light: #F7F7F7;
+  --nbp-background-dark:  #152E52;
+
+  // Borders
+  --nbp-border:           #C4C4C4;
+  --nbp-border-subtle:    #BFCEDD;
+
+  // Text
+  --nbp-text-primary:     #464646;
+  --nbp-text-secondary:   #333333;
+  --nbp-text-heading:     #152E52;
+  --nbp-text-link:        #4A74B0;
+  --nbp-text-on-dark:     #FFFFFF;
+
+  // Status
+  --nbp-error:            #C0392B;
+  --nbp-success:          #2E7D32;
+
+  // Border radii
+  --nbp-radius-xs:        2px;
+  --nbp-radius-sm:        4px;
+  --nbp-radius-md:        6px;
+  --nbp-radius-lg:        12px;
+
+  // Override Material M3 system color tokens with NBP brand values
+  --mat-sys-primary:              #152E52;
+  --mat-sys-on-primary:           #FFFFFF;
+  --mat-sys-primary-container:    #BFCEDD;
+  --mat-sys-on-primary-container: #152E52;
+  --mat-sys-secondary:            #4A74B0;
+  --mat-sys-on-secondary:         #FFFFFF;
+  --mat-sys-surface:              #FFFFFF;
+  --mat-sys-on-surface:           #464646;
+  --mat-sys-background:           #FFFFFF;
+  --mat-sys-on-background:        #464646;
+  --mat-sys-error:                #C0392B;
+  --mat-sys-on-error:             #FFFFFF;
+
+  // Override Material shape tokens for NBP restrained radii
+  --mat-sys-corner-extra-small:   2px;
+  --mat-sys-corner-small:         4px;
+  --mat-sys-corner-medium:        6px;
+  --mat-sys-corner-large:         12px;
+  --mat-sys-corner-extra-large:   12px;
+  --mat-sys-corner-full:          999px;
+}
+
+// 4. Self-hosted NBP fonts
+// -----------------------------------------------------------------------------
+@import url("./assets/fonts/fonts.css");
+
+// 5. Global Reset and Base Styles
+// -----------------------------------------------------------------------------
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: var(--nbp-background);
+  color: var(--nbp-text-primary);
+  font-family: "Libre Franklin", -apple-system, Arial, sans-serif;
+  font-size: 15.5px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// 6. Typography
+// -----------------------------------------------------------------------------
+h1,
+h2 {
+  font-family: "Brygada 1918", Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  color: var(--nbp-text-heading);
+  line-height: 1.33;
+}
+
+h1 { font-size: 32px; }
+h2 { font-size: 24px; }
+
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Libre Franklin", -apple-system, Arial, sans-serif;
+  font-weight: 600;
+  color: var(--nbp-text-heading);
+}
+
+h3 { font-size: 20px; }
+
+a {
+  color: var(--nbp-text-link);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// 7. Material component overrides for NBP brand
+// -----------------------------------------------------------------------------
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-flat-button.mat-primary {
+  background-color: var(--nbp-accent);
+  color: #ffffff;
+  border-radius: var(--nbp-radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.mat-mdc-snack-bar-container {
+  --mat-snack-bar-button-color: var(--nbp-gold);
+}
