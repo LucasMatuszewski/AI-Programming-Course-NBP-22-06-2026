@@ -16,7 +16,7 @@
 
 **Demo:** Live Playwright analysis of a reference site → token extraction → component generation
 
-**Links:** `../Prompt examples/Design System reverse-engineering with Playwright.md`; `../prompts/day-3/day-3-prompt-pack.md`
+**Links:** `../Prompt examples/Design System reverse-engineering with Playwright.md`; `../Prompt examples/` (pozostałe gotowe prompty)
 
 **Outcome:** Design system + tokens + first components ready.
 

@@ -30,7 +30,7 @@
 - Organize prompts, commit to git
 - Balance automation vs control (System 1 vs System 2 thinking)
 
-**Links:** Course Notes → *Prompt Engineering*, *Context Engineering*; `../prompts/` for example prompts
+**Links:** Course Notes → *Prompt Engineering*, *Context Engineering*; `../Prompt examples/` for example prompts
 
 **Outcome:** Solid mental model of how LLMs work and why context matters.
 
@@ -84,7 +84,7 @@
 - Start writing AGENTS.md / CLAUDE.md — describe how the agent should work
 - Share approaches across the group
 
-**Links:** `../prompts/day-1/day-1-prompt-pack.md`; `../.claude-example/` for example Claude config
+**Links:** `../Prompt examples/` (gotowe prompty: AGENTS.md, PRD, ADR); `../.claude-example/` for example Claude config
 
 **Demo:** Show your AGENTS.md, how it changes agent behavior
 

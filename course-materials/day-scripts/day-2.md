@@ -13,7 +13,7 @@
 - Generate a PRD (Product Requirements Document) with user stories
 - Validate assumptions with Deep Research (ChatGPT, Perplexity, Gemini)
 
-**Demo:** Live PRD generation with the agent — use a prompt like `../prompts/day-2/PRD-generation-prompt-promtcowboy.md`
+**Demo:** Live PRD generation with the agent — use a prompt like `../Prompt examples/PRD-generation-prompt-promtcowboy.md`
 
 **Outcome:** A PRD saved to `docs/PRD-Product-Requirements-Document.md`.
 
@@ -77,7 +77,7 @@
 
 **Demo:** Sub-agent delegation — ask be-developer to scaffold an API route
 
-**Links:** `../prompts/day-2/d2-e3-task-slicing-starter.md` (task decomposition exercise); `../Prompt examples/Plan-SubAgents-matrix-dependency-map.md`
+**Links:** `../exercises/day-2/d2-e3-task-slicing-starter.md` (task decomposition exercise); `../Prompt examples/Plan-SubAgents-matrix-dependency-map.md`
 
 **Outcome:** Agents configured with MCP, skills, sub-agents. Ready to build.
 

@@ -28,5 +28,5 @@ Total teaching time: ~6 hours per day.
 
 1. Follow the agenda (`../course-agenda.md`), not the script — improvise based on the group.
 2. Use these cards to stay on time and not miss key modules.
-3. Links point to detailed notes in `../Course Notes - AI in Programming.md`, `../Research/`, `../prompts/`, etc.
+3. Links point to detailed notes in `../Course Notes - AI in Programming.md`, `../Research/`, `../Prompt examples/`, etc.
 4. Each module lists the key outcome so you know when to move on.
