@@ -164,16 +164,23 @@ to AGENTS.md albo docs w repo.
 
 ---
 
-## 7) PRD + ADR - pamięć produktu i architektury
+## 7) PRD + ADR + Design Guidelines - pamięć produktu i architektury
 
 **Co to jest:** dokumenty w repo (`docs/`), czytane przez agenta na żądanie.
+Pisane **dla ludzi I dla agentów** - ten sam dokument służy zespołowi jako
+źródło prawdy i agentowi jako kontekst.
 PRD: co budujemy i po co (problem, użytkownik, zakres, kryteria akceptacji).
 ADR: krótki zapis decyzji architektonicznej z alternatywami, które odrzucono.
+Design Guidelines: system projektowy - tokeny (kolory, typografia, spacing),
+komponenty, ton komunikacji - żeby agent generował spójne UI, a nie
+"wariację na temat" przy każdej sesji.
 
 **Co tu umieszczać (checklist):**
 - [ ] PRD: problem, persona, zakres MVP, kryteria akceptacji, co POZA zakresem
 - [ ] ADR: kontekst -> decyzja -> konsekwencje -> odrzucone alternatywy
 - [ ] Jeden ADR = jedna decyzja (krótki; 1 strona max)
+- [ ] Design Guidelines: tokeny + zasady użycia komponentów (np.
+      `docs/design-guidelines.md`); wskaż go agentowi przy każdej pracy nad UI
 
 **Dlaczego to element harnessu:** agent w nowej sesji nie pamięta, DLACZEGO
 kod wygląda tak, a nie inaczej. Bez ADR "naprawi" Wam świadomą decyzję.
@@ -189,6 +196,8 @@ implementacji zmiennych w czasie (to kod i testy).
 **Co to jest:** plan konkretnego zadania: kolejność kroków, pliki do zmiany,
 testy, checkpointy. W Claude Code: plan mode (agent najpierw bada i proponuje
 plan, dopiero po akceptacji edytuje). Może być też plikiem `plan.md` / todo.
+W odróżnieniu od PRD/ADR (dla ludzi i agentów, trwałe) plan jest **tylko dla
+agentów i jednorazowy** - dokładne rozpisanie zadań na jedno wykonanie.
 
 **Co tu umieszczać (checklist):**
 - [ ] Kroki w kolejności, z plikami i testami per krok
@@ -284,6 +293,7 @@ OpenAI-compatible (Ollama, vLLM itp.) - kompletny przykład z komentarzami:
 | "Wolę pnpm, odpowiadaj po polsku" | stała, osobista | memory / ~/.claude/CLAUDE.md |
 | "Budujemy eksport do JSON, bo..." | do końca feature'a | PRD |
 | "Pieniądze w decimal cents, nie float" | stała decyzja | ADR |
+| "Kolory, typografia, zasady komponentów" | stała, całe UI | Design Guidelines |
 | "Krok 1: test, krok 2: implementacja" | jedno zadanie | plan / plan mode |
 | "Odrzucam sugestię X w tym diffie" | jeden PR | komentarz PR |
 | "Aktualna dokumentacja biblioteki Y" | na żądanie | MCP (np. Context7) |
